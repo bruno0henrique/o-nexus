@@ -1,0 +1,55 @@
+﻿{
+    "run_id":  "2026-04-08-040742",
+    "agents":  [
+                   {
+                       "status":  "idle",
+                       "icon":  "📊",
+                       "desk":  {
+                                    "col":  1,
+                                    "row":  1
+                                },
+                       "name":  "Elias Economia",
+                       "id":  "elias-economia"
+                   },
+                   {
+                       "status":  "idle",
+                       "icon":  "🧹",
+                       "desk":  {
+                                    "col":  2,
+                                    "row":  1
+                                },
+                       "name":  "Dora Dados",
+                       "id":  "dora-dados"
+                   },
+                   {
+                       "status":  "idle",
+                       "icon":  "🔗",
+                       "desk":  {
+                                    "col":  3,
+                                    "row":  1
+                                },
+                       "name":  "Igor Integração",
+                       "id":  "igor-integracao"
+                   },
+                   {
+                       "status":  "idle",
+                       "icon":  "🌐",
+                       "desk":  {
+                                    "col":  1,
+                                    "row":  2
+                                },
+                       "name":  "Sérgio Frontend",
+                       "id":  "sergio-frontend"
+                   }
+               ],
+    "handoff":  null,
+    "startedAt":  "2026-04-08T04:07:42Z",
+    "status":  "running",
+    "squad":  "inventory-intelligence-squad",
+    "step":  {
+                 "current":  0,
+                 "label":  "",
+                 "total":  7
+             },
+    "updatedAt":  "2026-04-08T04:07:42Z"
+}

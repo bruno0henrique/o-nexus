@@ -1,0 +1,27 @@
+RESUMO EXECUTIVO - AUDITORIA ESTOQUE
+==========================================
+Data: 2026-04-06
+Execução: 2026-04-06-133728
+
+CHECKPOINT:
+- Linhas lidas: 25
+- Linhas consolidadas: 25
+- Status: OK
+
+REGRA 1 - INTEGRIDADE DE IDs:
+- Total items únicos: 25
+- IDs com variações: 0
+
+REGRA 2 - SALDOS:
+- Total Entradas: 2974
+- Total Saídas: 0
+- Saldo Total: 2974
+- Saldos negativos: 0
+
+REGRA 3 - VALORAÇÃO:
+- Valor Total Estoque: R$ 19969.90
+- Total de itens: 25
+
+ARQUIVOS GERADOS:
+- inventory_analysis.json
+- resumo.txt

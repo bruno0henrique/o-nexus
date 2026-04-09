@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>O Nexus - Statistics &amp; Financial Reports</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;400;700;800&amp;family=Inter:wght@300;400;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-primary": "#00363d",
+                      "tertiary-fixed-dim": "#f3bf26",
+                      "surface-container-low": "#1c1b1b",
+                      "primary-fixed": "#9cf0ff",
+                      "on-secondary-container": "#8ac1cc",
+                      "on-secondary": "#00363d",
+                      "surface-tint": "#00daf3",
+                      "outline-variant": "#3b494c",
+                      "surface-container-highest": "#353534",
+                      "surface-variant": "#353534",
+                      "on-surface": "#e5e2e1",
+                      "secondary-fixed-dim": "#98d0da",
+                      "primary-fixed-dim": "#00daf3",
+                      "primary": "#c3f5ff",
+                      "inverse-on-surface": "#313030",
+                      "secondary-container": "#11505a",
+                      "outline": "#849396",
+                      "inverse-surface": "#e5e2e1",
+                      "surface-bright": "#393939",
+                      "tertiary-container": "#fec931",
+                      "surface-container": "#201f1f",
+                      "tertiary-fixed": "#ffdf96",
+                      "on-tertiary-container": "#6f5500",
+                      "on-primary-fixed-variant": "#004f58",
+                      "inverse-primary": "#006875",
+                      "surface": "#131313",
+                      "on-tertiary": "#3e2e00",
+                      "on-primary-container": "#00626e",
+                      "primary-container": "#00e5ff",
+                      "secondary": "#98d0da",
+                      "on-tertiary-fixed-variant": "#594400",
+                      "on-error-container": "#ffdad6",
+                      "surface-container-lowest": "#0e0e0e",
+                      "error-container": "#93000a",
+                      "tertiary": "#ffeac0",
+                      "error": "#ffb4ab",
+                      "on-tertiary-fixed": "#251a00",
+                      "surface-container-high": "#2a2a2a",
+                      "on-secondary-fixed-variant": "#0d4e57",
+                      "secondary-fixed": "#b3ecf7",
+                      "background": "#131313",
+                      "surface-dim": "#131313",
+                      "on-surface-variant": "#bac9cc",
+                      "on-error": "#690005",
+                      "on-secondary-fixed": "#001f24",
+                      "on-primary-fixed": "#001f24",
+                      "on-background": "#e5e2e1"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "fontFamily": {
+                      "headline": ["Manrope"],
+                      "body": ["Inter"],
+                      "label": ["Inter"]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .metric-glow:hover {
+            box-shadow: 0 0 20px rgba(0, 229, 255, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body selection:bg-primary-container/30">
+<!-- SideNavBar - estilo compacto ícone+texto (admin) -->
+<aside class="fixed left-0 top-0 h-full w-[78px] z-[60] bg-[#1C1B1B] flex flex-col items-center py-5">
+  <div class="w-full text-center px-1 mb-5">
+    <p class="text-sm font-bold text-[#C3F5FF] font-manrope leading-none">O Nexus</p>
+    <p class="text-[9px] font-bold text-[#C3F5FF] font-manrope leading-none mt-0.5">HUD</p>
+    <p class="text-[7px] tracking-[0.1em] text-[#BAC9CC] opacity-50 mt-1 uppercase leading-snug">ADMIN<br>TERMINAL</p>
+  </div>
+  <nav class="flex-1 flex flex-col w-full">
+    <a class="flex flex-col items-center justify-center gap-0.5 py-3 w-full pr-[4px] text-[#BAC9CC] opacity-70 hover:opacity-100 hover:bg-[#2A2A2A] hover:text-[#00E5FF] transition-all duration-150" href="#">
+      <span class="material-symbols-outlined" style="font-size:22px">dashboard</span>
+      <span class="text-[8px] uppercase tracking-widest leading-none mt-0.5">PAINEL</span>
+    </a>
+    <a class="flex flex-col items-center justify-center gap-0.5 py-3 w-full pr-[4px] text-[#BAC9CC] opacity-70 hover:opacity-100 hover:bg-[#2A2A2A] hover:text-[#00E5FF] transition-all duration-150" href="#">
+      <span class="material-symbols-outlined" style="font-size:22px">inventory_2</span>
+      <span class="text-[8px] uppercase tracking-widest leading-none mt-0.5">INVENTÁRIO</span>
+    </a>
+    <a class="flex flex-col items-center justify-center gap-0.5 py-3 w-full pr-[4px] text-[#BAC9CC] opacity-70 hover:opacity-100 hover:bg-[#2A2A2A] hover:text-[#00E5FF] transition-all duration-150" href="#">
+      <span class="material-symbols-outlined" style="font-size:22px">insights</span>
+      <span class="text-[8px] uppercase tracking-widest leading-none mt-0.5">ANÁLISES</span>
+    </a>
+    <a class="flex flex-col items-center justify-center gap-0.5 py-3 w-full pr-[4px] text-[#BAC9CC] opacity-70 hover:opacity-100 hover:bg-[#2A2A2A] hover:text-[#00E5FF] transition-all duration-150" href="#">
+      <span class="material-symbols-outlined" style="font-size:22px">local_shipping</span>
+      <span class="text-[8px] uppercase tracking-widest leading-none mt-0.5">LOGÍSTICA</span>
+    </a>
+    <!-- Active: Estatísticas -->
+    <a class="flex flex-col items-center justify-center gap-0.5 py-3 w-full pr-[4px] border-r-2 border-[#00E5FF] bg-[#00E5FF]/5 transition-all duration-150" href="#">
+      <span class="material-symbols-outlined text-[#00E5FF]" style="font-size:22px">equalizer</span>
+      <span class="text-[8px] uppercase tracking-widest leading-none mt-0.5 text-[#00E5FF]">ESTATÍSTICAS</span>
+    </a>
+  </nav>
+  <div class="mt-auto mb-4 w-full">
+    <a class="flex flex-col items-center justify-center gap-0.5 py-3 w-full pr-[4px] text-[#BAC9CC] opacity-70 hover:opacity-100 hover:bg-[#2A2A2A] hover:text-[#00E5FF] transition-all duration-150" href="#">
+      <span class="material-symbols-outlined" style="font-size:20px">logout</span>
+      <span class="text-[8px] uppercase tracking-widest leading-none mt-0.5">SAIR</span>
+    </a>
+  </div>
+  </aside>
+<!-- TopNavBar -->
+<header class="fixed top-0 right-0 left-0 w-full z-50 bg-[#131313]/70 backdrop-blur-xl flex justify-between items-center h-16 px-8 ml-[78px] shadow-[0_8px_32px_rgba(0,229,255,0.06)]">
+<div class="flex items-center gap-8">
+<div class="relative group">
+<span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-on-surface-variant">
+<span class="material-symbols-outlined text-sm">search</span>
+</span>
+<input class="bg-surface-container-lowest border-none text-on-surface placeholder:text-on-surface-variant/40 text-sm py-2 pl-10 pr-4 rounded-lg w-64 focus:ring-1 focus:ring-primary/20 transition-all" placeholder="Consultar painel de voo..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<button class="text-[#BAC9CC] hover:bg-[#2A2A2A] transition-colors duration-300 p-2 rounded-lg cursor-pointer active:scale-95">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-[#BAC9CC] hover:bg-[#2A2A2A] transition-colors duration-300 p-2 rounded-lg cursor-pointer active:scale-95">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<div class="h-8 w-8 rounded-full bg-gradient-to-br from-primary-container to-secondary overflow-hidden border border-primary/20">
+<img alt="User profile avatar" class="w-full h-full object-cover" data-alt="professional portrait of a high-end retail executive with sharp lighting and dark minimalist background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBFP4X6l-n00tREFXUoSkDNINPsSp6Yydw9e8ML_JzT6HLi4fT3M2aU2yKV39XVYxjkoRYO_743wETNSqaEVR-up5Pafi1hVVCMXMIlMkCbugsg5zIgrMcnV00DUsiWfcp_iMOvM12AL00zSNOSfPaLIJ6GYQzVn2ZuGbCHJCrlwdV-fNfubjCTGjMWNt0zVssIAl2K-JDKrxEYmdj6s-k1tfHR0WXAWrCy78WQeKEJBSmPnEkRO1Vj4PZ9e5Gs-ye54cpFsl1RBMQ"/>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="ml-[78px] pt-24 px-12 pb-12 min-h-screen">
+<!-- Header Section -->
+<div class="flex justify-between items-end mb-12">
+<div>
+<span class="font-manrope uppercase tracking-[0.4em] text-[10px] text-primary/70 mb-2 block">VISÃO EXECUTIVA</span>
+<h2 class="font-headline text-5xl font-extrabold tracking-tighter text-[#C3F5FF]">Inteligência Financeira</h2>
+</div>
+<div class="flex gap-4">
+<button class="flex items-center gap-2 px-6 py-3 bg-surface-container-high border border-outline-variant/15 text-on-surface hover:bg-surface-container transition-all cursor-pointer active:scale-95 rounded-md text-sm font-semibold"><span class="material-symbols-outlined text-lg">file_download</span> RELATÓRIO CSV</button>
+<button class="flex items-center gap-2 px-6 py-3 bg-primary text-on-primary hover:opacity-90 transition-all cursor-pointer active:scale-95 rounded-md text-sm font-extrabold"><span class="material-symbols-outlined text-lg">picture_as_pdf</span> EXPORTAR PDF</button>
+</div>
+</div>
+<!-- Metric Bento Grid -->
+<div class="grid grid-cols-12 gap-6 mb-12">
+<!-- Revenue Card -->
+<div class="col-span-12 md:col-span-4 bg-surface-container p-8 rounded-xl metric-glow transition-all group border-l-2 border-primary-container/30">
+<div class="flex justify-between items-start mb-6">
+<span class="font-label text-xs uppercase tracking-widest text-on-surface-variant">RECEITA</span>
+<span class="text-primary material-symbols-outlined group-hover:scale-110 transition-transform">payments</span>
+</div>
+<div class="flex items-baseline gap-2 mb-2">
+<span class="font-headline text-4xl font-black text-[#C3F5FF]">$2.48M</span>
+<span class="text-primary text-xs font-bold font-label">RECEITA</span>
+</div>
+<div class="w-full bg-surface-container-lowest h-1 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[84%]"></div>
+</div>
+<p class="mt-4 text-[11px] text-on-surface-variant leading-relaxed">Total gross sales across all retail flight decks for current fiscal year.</p>
+</div>
+<!-- Profit Margin Card -->
+<div class="col-span-12 md:col-span-4 bg-surface-container p-8 rounded-xl metric-glow transition-all group border-l-2 border-secondary/30">
+<div class="flex justify-between items-start mb-6">
+<span class="font-label text-xs uppercase tracking-widest text-on-surface-variant">MARGEM DE LUCRO</span>
+<span class="text-secondary material-symbols-outlined group-hover:scale-110 transition-transform">trending_up</span>
+</div>
+<div class="flex items-baseline gap-2 mb-2">
+<span class="font-headline text-4xl font-black text-[#C3F5FF]">34.2%</span>
+<span class="text-secondary text-xs font-bold font-label">MARGEM DE LUCRO</span>
+</div>
+<div class="w-full bg-surface-container-lowest h-1 rounded-full overflow-hidden">
+<div class="bg-secondary h-full w-[65%]"></div>
+</div>
+<p class="mt-4 text-[11px] text-on-surface-variant leading-relaxed">Net profit percentage after all operating and logistic deductions.</p>
+</div>
+<!-- Operating Costs Card -->
+<div class="col-span-12 md:col-span-4 bg-surface-container p-8 rounded-xl metric-glow transition-all group border-l-2 border-error/30">
+<div class="flex justify-between items-start mb-6">
+<span class="font-label text-xs uppercase tracking-widest text-on-surface-variant">CUSTOS OPERACIONAIS</span>
+<span class="text-error material-symbols-outlined group-hover:scale-110 transition-transform">account_balance_wallet</span>
+</div>
+<div class="flex items-baseline gap-2 mb-2">
+<span class="font-headline text-4xl font-black text-[#C3F5FF]">$842K</span>
+<span class="text-error text-xs font-bold font-label">CUSTOS OPERACIONAIS</span>
+</div>
+<div class="w-full bg-surface-container-lowest h-1 rounded-full overflow-hidden">
+<div class="bg-error h-full w-[42%]"></div>
+</div>
+<p class="mt-4 text-[11px] text-on-surface-variant leading-relaxed">Variable and fixed overhead costs optimized for this cycle.</p>
+</div>
+</div>
+<!-- Comparison Chart Section -->
+<div class="grid grid-cols-12 gap-8 mb-12">
+<div class="col-span-12 lg:col-span-8 bg-surface-container rounded-2xl p-8 relative overflow-hidden">
+<div class="absolute top-0 right-0 p-8 opacity-5">
+<span class="material-symbols-outlined text-[120px]" style="font-variation-settings: 'FILL' 1;">equalizer</span>
+</div>
+<div class="flex justify-between items-center mb-10">
+<div>
+<h3 class="font-headline text-xl font-bold text-[#C3F5FF]">Velocidade Ano a Ano</h3>
+<p class="text-xs text-on-surface-variant mt-1">Comparação do desempenho da receita bruta (Mensal)</p>
+</div>
+<div class="flex gap-6">
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 rounded-full bg-primary-container"></span>
+<span class="text-[10px] uppercase font-bold tracking-tighter opacity-70">Current Year</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 rounded-full bg-surface-container-highest"></span>
+<span class="text-[10px] uppercase font-bold tracking-tighter opacity-70">Previous Year</span>
+</div>
+</div>
+</div>
+<!-- Custom Bar Chart Simulation -->
+<div class="flex items-end justify-between h-64 gap-2">
+<!-- Month Jan -->
+<div class="flex-1 flex flex-col items-center gap-2 group">
+<div class="w-full flex items-end justify-center gap-1 h-full">
+<div class="w-3 bg-surface-container-highest rounded-t-sm h-[40%] group-hover:opacity-100 opacity-60 transition-all"></div>
+<div class="w-3 bg-primary-container rounded-t-sm h-[65%] group-hover:brightness-110 transition-all shadow-[0_0_15px_rgba(0,229,255,0.2)]"></div>
+</div>
+<span class="text-[10px] font-bold opacity-30">JAN</span>
+</div>
+<!-- Month Feb -->
+<div class="flex-1 flex flex-col items-center gap-2 group">
+<div class="w-full flex items-end justify-center gap-1 h-full">
+<div class="w-3 bg-surface-container-highest rounded-t-sm h-[50%] group-hover:opacity-100 opacity-60 transition-all"></div>
+<div class="w-3 bg-primary-container rounded-t-sm h-[75%] group-hover:brightness-110 transition-all shadow-[0_0_15px_rgba(0,229,255,0.2)]"></div>
+</div>
+<span class="text-[10px] font-bold opacity-30">FEB</span>
+</div>
+<!-- Month Mar -->
+<div class="flex-1 flex flex-col items-center gap-2 group">
+<div class="w-full flex items-end justify-center gap-1 h-full">
+<div class="w-3 bg-surface-container-highest rounded-t-sm h-[45%] group-hover:opacity-100 opacity-60 transition-all"></div>
+<div class="w-3 bg-primary-container rounded-t-sm h-[90%] group-hover:brightness-110 transition-all shadow-[0_0_15px_rgba(0,229,255,0.2)]"></div>
+</div>
+<span class="text-[10px] font-bold opacity-30">MAR</span>
+</div>
+<!-- Month Apr -->
+<div class="flex-1 flex flex-col items-center gap-2 group">
+<div class="w-full flex items-end justify-center gap-1 h-full">
+<div class="w-3 bg-surface-container-highest rounded-t-sm h-[60%] group-hover:opacity-100 opacity-60 transition-all"></div>
+<div class="w-3 bg-primary-container rounded-t-sm h-[80%] group-hover:brightness-110 transition-all shadow-[0_0_15px_rgba(0,229,255,0.2)]"></div>
+</div>
+<span class="text-[10px] font-bold opacity-30">APR</span>
+</div>
+<!-- Month May -->
+<div class="flex-1 flex flex-col items-center gap-2 group">
+<div class="w-full flex items-end justify-center gap-1 h-full">
+<div class="w-3 bg-surface-container-highest rounded-t-sm h-[30%] group-hover:opacity-100 opacity-60 transition-all"></div>
+<div class="w-3 bg-primary-container rounded-t-sm h-[40%] group-hover:brightness-110 transition-all shadow-[0_0_15px_rgba(0,229,255,0.2)]"></div>
+</div>
+<span class="text-[10px] font-bold opacity-30">MAY</span>
+</div>
+<!-- Month Jun -->
+<div class="flex-1 flex flex-col items-center gap-2 group">
+<div class="w-full flex items-end justify-center gap-1 h-full">
+<div class="w-3 bg-surface-container-highest rounded-t-sm h-[70%] group-hover:opacity-100 opacity-60 transition-all"></div>
+<div class="w-3 bg-primary-container rounded-t-sm h-[85%] group-hover:brightness-110 transition-all shadow-[0_0_15px_rgba(0,229,255,0.2)]"></div>
+</div>
+<span class="text-[10px] font-bold opacity-30">JUN</span>
+</div>
+</div>
+</div>
+<!-- Fee & Tax Structure Panel -->
+<div class="col-span-12 lg:col-span-4 bg-surface-container-low rounded-2xl p-8 border border-outline-variant/10">
+<h3 class="font-headline text-lg font-bold text-[#C3F5FF] mb-6">Integridade Estrutural de Impostos e Taxas</h3>
+<div class="space-y-6">
+<div class="p-4 bg-surface-container-lowest rounded-lg">
+<div class="flex justify-between items-center mb-2">
+<span class="text-[10px] font-bold tracking-widest text-on-surface-variant uppercase">VAT / Sales Tax</span>
+<span class="text-xs font-headline font-bold text-primary">18.0%</span>
+</div>
+<div class="w-full bg-surface-container h-[2px]">
+<div class="bg-primary w-[70%] h-full"></div>
+</div>
+<p class="text-[9px] mt-2 opacity-40 leading-relaxed italic">Calculated across 42 international territories based on local Nexus nexus points.</p>
+</div>
+<div class="p-4 bg-surface-container-lowest rounded-lg">
+<div class="flex justify-between items-center mb-2">
+<span class="text-[10px] font-bold tracking-widest text-on-surface-variant uppercase">Processing Fees</span>
+<span class="text-xs font-headline font-bold text-secondary">2.45%</span>
+</div>
+<div class="w-full bg-surface-container h-[2px]">
+<div class="bg-secondary w-[45%] h-full"></div>
+</div>
+<p class="text-[9px] mt-2 opacity-40 leading-relaxed italic">Gateway optimization and flight deck transaction routing costs.</p>
+</div>
+<div class="p-4 bg-surface-container-lowest rounded-lg">
+<div class="flex justify-between items-center mb-2">
+<span class="text-[10px] font-bold tracking-widest text-on-surface-variant uppercase">Logistics Levy</span>
+<span class="text-xs font-headline font-bold text-tertiary-fixed-dim">5.2%</span>
+</div>
+<div class="w-full bg-surface-container h-[2px]">
+<div class="bg-tertiary-fixed-dim w-[60%] h-full"></div>
+</div>
+<p class="text-[9px] mt-2 opacity-40 leading-relaxed italic">Fuel surcharges and automated sorting facility operational energy costs.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Recent Audit Trail -->
+<div class="bg-surface-container rounded-2xl p-8">
+<div class="flex justify-between items-center mb-8">
+<h3 class="font-headline text-xl font-bold text-[#C3F5FF]">Trilha de Auditoria Financeira</h3>
+<span class="text-[10px] font-bold tracking-widest text-on-surface-variant uppercase bg-surface-container-high px-3 py-1 rounded">ATUALIZAÇÕES AO VIVO</span>
+</div>
+<div class="space-y-4">
+<div class="flex items-center justify-between p-4 bg-surface-container-low rounded-lg hover:bg-surface-container-high transition-colors">
+<div class="flex items-center gap-6">
+<div class="p-2 rounded bg-surface-container-lowest text-primary">
+<span class="material-symbols-outlined">receipt_long</span>
+</div>
+<div>
+<p class="text-sm font-bold">Receita de Entrada: Tokyo Cluster</p>
+<p class="text-[10px] text-on-surface-variant uppercase tracking-wider">Aug 24, 2024 • 14:22:10</p>
+</div>
+</div>
+<div class="text-right">
+<p class="text-sm font-headline font-black text-primary">+$142,500.00</p>
+<p class="text-[10px] text-on-surface-variant font-bold">TXN_ID: 9823-XJ</p>
+</div>
+</div>
+<div class="flex items-center justify-between p-4 bg-surface-container-low rounded-lg hover:bg-surface-container-high transition-colors">
+<div class="flex items-center gap-6">
+<div class="p-2 rounded bg-surface-container-lowest text-secondary">
+<span class="material-symbols-outlined">account_balance</span>
+</div>
+<div>
+<p class="text-sm font-bold">Liquidação de Impostos: EU Nexus</p>
+<p class="text-[10px] text-on-surface-variant uppercase tracking-wider">Aug 24, 2024 • 11:05:45</p>
+</div>
+</div>
+<div class="text-right">
+<p class="text-sm font-headline font-black text-secondary">-$21,430.22</p>
+<p class="text-[10px] text-on-surface-variant font-bold">TXN_ID: 1140-ZP</p>
+</div>
+</div>
+<div class="flex items-center justify-between p-4 bg-surface-container-low rounded-lg hover:bg-surface-container-high transition-colors opacity-60">
+<div class="flex items-center gap-6">
+<div class="p-2 rounded bg-surface-container-lowest text-error">
+<span class="material-symbols-outlined">engineering</span>
+</div>
+<div>
+<p class="text-sm font-bold">Manutenção de Infraestrutura: NY Core</p>
+<p class="text-[10px] text-on-surface-variant uppercase tracking-wider">Aug 23, 2024 • 18:50:11</p>
+</div>
+</div>
+<div class="text-right">
+<p class="text-sm font-headline font-black text-error">-$8,900.00</p>
+<p class="text-[10px] text-on-surface-variant font-bold">TXN_ID: 5521-LM</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Floating Action Button - Supressed as per Task Logic for Stats/Details Screen -->
+</body></html>

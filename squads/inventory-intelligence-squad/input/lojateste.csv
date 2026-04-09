@@ -1,0 +1,13 @@
+loja_id,sku_id,produto,categoria,marca,setor,preco_custo,preco_venda,preco_promocional,estoque_atual,giro_30d,data_vencimento
+289cfb8e-2554-4185-91ad7-84bc242493d0,SKU001,Arroz Tipo 1 5kg,Alimentos,Tio Joao,Mercearia,20.00,25.00,,120,200,2026-12-31
+289cfb8e-2554-4185-91ad7-84bc242493d0,SKU002,Leite Integral 1L,Laticinios,Nestle,Frios,4.50,5.80,5.00,0,300,2026-06-15
+289cfb8e-2554-4185-91ad7-84bc242493d0,SKU003,Iogurte Morango,Laticinios,Danone,Frios,2.50,3.50,,25,40,2026-04-10
+289cfb8e-2554-4185-91ad7-84bc242493d0,SKU004,Feijao Carioca,Alimentos,Camil,Mercearia,7.00,6.50,,50,80,2026-11-20
+289cfb8e-2554-4185-91ad7-84bc242493d0,SKU005,Vinho Tinto Seco,Bebidas,Reservado,Adega,30.00,55.00,49.90,350,0,2028-05-10
+289cfb8e-2554-4185-91ad7-84bc242493d0,SKU006,Cerveja Pilsen,Bebidas,Ambev,Adega,2.80,3.90,,500,800,2026-08-01
+289cfb8e-2554-4185-91ad7-84bc242493d0,SKU007,Detergente,Limpeza,Ype,Limpeza,1.80,2.50,,80,120,2027-01-10
+289cfb8e-2554-4185-91ad7-84bc242493d0,SKU008,Pao de Forma,Padaria,Bauducco,Padaria,6.00,8.50,,10,90,2026-04-09
+289cfb8e-2554-4185-91ad7-84bc242493d0,SKU009,Refrigerante 2L,Bebidas,Coca-Cola,Adega,6.50,9.00,,0,250,2026-09-20
+289cfb8e-2554-4185-91ad7-84bc242493d0,SKU010,Macarrao,Alimentos,Barilla,Mercearia,3.50,4.80,,150,180,2027-03-15
+289cfb8e-2554-4185-91ad7-84bc242493d0,SKU011,Molho de Tomate,Alimentos,Heinz,Mercearia,1.90,1.70,,200,150,2026-10-10
+289cfb8e-2554-4185-91ad7-84bc242493d0,SKU012,Cafe Torrado 500g,Alimentos,Pilao,Mercearia,12.00,11.00,,60,90,2026-09-09

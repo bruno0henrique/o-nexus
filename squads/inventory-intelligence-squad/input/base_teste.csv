@@ -1,0 +1,101 @@
+SKU_ID,Produto,Categoria,Custo (R$),Venda (R$),Estoque,Giro (30d),Vencimento
+NEX-1001,Vinho Tinto Reservado,Bebidas,25.50,48.00,45,2,2027-10-15
+NEX-1002,Cerveja Lata 350ml,Bebidas,2.80,5.50,3,480,2026-11-20
+NEX-1003,Iogurte Natural 500g,Laticínios,4.20,8.90,22,35,2026-04-10
+NEX-1004,Queijo Prato Kg,Laticínios,18.00,34.00,15,18,2026-05-22
+NEX-1005,Arroz 5kg Tipo 1,Mercearia,18.50,29.90,120,4,2027-01-05
+NEX-1006,Feijão Carioca 1kg,Mercearia,6.20,11.50,55,62,2026-09-14
+NEX-1007,Pão de Forma Integral,Padaria,4.50,8.50,12,85,2026-04-09
+NEX-1008,Azeite Oliva 500ml,Mercearia,32.00,59.00,8,12,2027-03-01
+NEX-1009,Leite Integral 1L,Laticínios,3.80,5.50,2,310,2026-06-15
+NEX-1010,Biscoito Recheado,Padaria,1.90,3.80,85,92,2026-12-10
+NEX-1011,Suco Laranja 1L,Bebidas,5.50,10.00,40,38,2026-04-11
+NEX-1012,Água Mineral 500ml,Bebidas,0.90,2.50,200,185,2027-05-20
+NEX-1013,Macarrão Penne 500g,Mercearia,3.20,6.50,45,42,2027-02-18
+NEX-1014,Manteiga 200g,Laticínios,8.50,15.90,98,1,2026-08-30
+NEX-1015,Bolo de Fubá Caseiro,Padaria,7.50,14.00,10,15,2026-04-08
+NEX-1016,Detergente Líquido,Limpeza,1.50,2.80,60,55,2028-01-01
+NEX-1017,Sabão em Pó 1kg,Limpeza,8.90,14.50,30,25,2027-12-30
+NEX-1018,Café Torrado 500g,Mercearia,12.50,19.90,40,45,2026-10-10
+NEX-1019,Açúcar Refinado 1kg,Mercearia,3.20,4.90,150,140,2027-06-15
+NEX-1020,Óleo de Soja 900ml,Mercearia,5.80,8.50,80,75,2026-11-30
+NEX-1021,Farinha de Trigo 1kg,Mercearia,3.50,5.90,60,50,2027-02-10
+NEX-1022,Sal Refinado 1kg,Mercearia,1.20,2.50,100,30,2028-05-20
+NEX-1023,Molho de Tomate,Mercearia,1.80,3.50,90,85,2027-01-15
+NEX-1024,Milho para Pipoca,Mercearia,2.50,4.90,40,15,2027-03-22
+NEX-1025,Sardinha em Lata,Mercearia,3.80,6.50,35,10,2028-08-10
+NEX-1026,Maionese 500g,Mercearia,4.50,8.90,25,30,2026-07-05
+NEX-1027,Ketchup 400g,Mercearia,5.20,9.90,20,18,2026-12-15
+NEX-1028,Mostarda 200g,Mercearia,3.50,6.90,15,12,2026-11-20
+NEX-1029,Vinagre de Álcool,Mercearia,1.80,3.50,30,10,2027-04-10
+NEX-1030,Chocolate Barra,Doces,4.20,7.90,50,65,2026-08-30
+NEX-1031,Bala de Goma,Doces,0.50,1.50,200,180,2027-10-15
+NEX-1032,Refrigerante 2L,Bebidas,4.50,8.50,120,140,2026-06-25
+NEX-1033,Energético Lata,Bebidas,3.50,9.90,45,50,2027-01-30
+NEX-1034,Chá Gelado 1.5L,Bebidas,3.80,7.50,30,25,2026-12-10
+NEX-1035,Água de Coco 1L,Bebidas,5.50,10.50,20,25,2026-05-15
+NEX-1036,Vodca Garrafa,Bebidas,22.00,45.00,15,5,2029-01-01
+NEX-1037,Whisky 1L,Bebidas,85.00,160.00,10,0,2030-01-01
+NEX-1038,Papel Higiênico 12un,Higiene,12.50,22.00,40,38,2028-01-01
+NEX-1039,Creme Dental 90g,Higiene,2.50,5.90,80,75,2027-06-30
+NEX-1040,Sabonete Barra,Higiene,1.20,3.50,150,140,2027-12-15
+NEX-1041,Shampoo 400ml,Higiene,8.50,16.90,25,20,2027-05-20
+NEX-1042,Condicionador 400ml,Higiene,9.50,18.90,20,15,2027-05-20
+NEX-1043,Desodorante Aerosol,Higiene,7.80,15.90,50,48,2027-10-30
+NEX-1044,Fralda Descartável,Higiene,35.00,58.00,15,18,2027-01-15
+NEX-1045,Absorvente 8un,Higiene,3.50,7.90,60,55,2027-08-20
+NEX-1046,Presunto Kg,Frios,12.00,24.50,8,25,2026-04-12
+NEX-1047,Mortadela Kg,Frios,8.50,16.90,10,30,2026-04-11
+NEX-1048,Salame Italiano,Frios,35.00,68.00,5,4,2026-07-15
+NEX-1049,Requeijão Cremoso,Laticínios,5.80,11.50,30,45,2026-04-10
+NEX-1050,Creme de Leite,Laticínios,2.50,4.80,100,95,2026-11-30
+NEX-1051,Leite Condensado,Laticínios,4.50,7.90,85,80,2026-12-15
+NEX-1052,Doce de Leite,Laticínios,6.50,12.90,20,15,2026-10-20
+NEX-1053,Iogurte Grego,Laticínios,2.80,5.50,40,55,2026-04-09
+NEX-1054,Refris Cola 350ml,Bebidas,2.20,4.50,5,400,2026-08-30
+NEX-1055,Suco em Pó,Mercearia,0.50,1.20,300,280,2027-12-15
+NEX-1056,Gelatina Pó,Mercearia,0.90,2.50,100,40,2027-06-30
+NEX-1057,Achocolatado 400g,Mercearia,5.50,9.90,45,50,2026-11-15
+NEX-1058,Farinha de Milho,Mercearia,2.50,4.90,30,25,2027-01-10
+NEX-1059,Tapioca 500g,Mercearia,4.20,8.50,20,25,2026-05-30
+NEX-1060,Granola 500g,Mercearia,12.00,22.00,55,1,2026-09-15
+NEX-1061,Mel Natural 250g,Mercearia,15.00,28.00,10,5,2027-10-20
+NEX-1062,Aveia em Flocos,Mercearia,3.80,7.50,25,20,2027-03-15
+NEX-1063,Pipoca para Micro,Mercearia,2.50,5.50,60,55,2027-05-10
+NEX-1064,Batata Palha,Mercearia,4.50,8.90,40,45,2026-07-20
+NEX-1065,Molho Inglês,Mercearia,3.80,7.50,12,2,2027-11-30
+NEX-1066,Shoyu 250ml,Mercearia,5.50,10.90,15,8,2027-08-15
+NEX-1067,Palmito Inteiro,Mercearia,18.00,32.00,10,3,2028-01-20
+NEX-1068,Ervilha em Lata,Mercearia,2.20,4.50,80,75,2027-12-10
+NEX-1069,Milho Verde Lata,Mercearia,2.50,4.90,90,85,2027-12-15
+NEX-1070,Atum em Lata,Mercearia,6.50,11.90,40,35,2028-05-10
+NEX-1071,Carne Moída 500g,Açougue,12.50,22.00,2,60,2026-04-07
+NEX-1072,Frango Inteiro,Açougue,15.00,28.00,10,15,2026-05-10
+NEX-1073,Linguiça Toscana,Açougue,18.00,29.90,15,20,2026-05-05
+NEX-1074,Ovos Dúzia,Ovos,8.50,14.00,25,45,2026-04-12
+NEX-1075,Banana Prata Kg,Hortifruti,4.50,7.90,10,25,2026-04-08
+NEX-1076,Maçã Fuji Kg,Hortifruti,8.50,14.00,8,15,2026-04-09
+NEX-1077,Tomate Italiano,Hortifruti,6.50,10.90,12,20,2026-04-08
+NEX-1078,Cebola Branca Kg,Hortifruti,3.50,6.50,20,18,2026-04-15
+NEX-1079,Batata Monalisa,Hortifruti,4.20,7.90,30,28,2026-04-15
+NEX-1080,Alface Crespa,Hortifruti,1.50,3.50,5,15,2026-04-07
+NEX-1081,Limão Taiti Kg,Hortifruti,3.20,6.50,15,12,2026-04-20
+NEX-1082,Cenoura Kg,Hortifruti,4.50,8.50,10,12,2026-04-15
+NEX-1083,Pimentão Verde,Hortifruti,1.80,3.90,8,10,2026-04-15
+NEX-1084,Alho Cartela,Hortifruti,4.50,8.90,30,25,2026-06-30
+NEX-1085,Amaciante 2L,Limpeza,12.00,22.50,25,20,2027-12-15
+NEX-1086,Desinfetante 1L,Limpeza,4.50,8.90,40,35,2027-10-30
+NEX-1087,Água Sanitária,Limpeza,2.80,5.50,50,45,2027-12-15
+NEX-1088,Esponja de Aço,Limpeza,1.20,2.90,100,85,2029-01-01
+NEX-1089,Pano de Prato,Bazar,3.50,7.90,20,5,2030-01-01
+NEX-1090,Velas Brancas,Bazar,4.50,8.50,80,0,2028-12-15
+NEX-1091,Fósforos Longos,Bazar,1.80,3.50,50,45,2028-10-15
+NEX-1092,Lâmpada LED,Bazar,8.50,15.90,30,12,2027-12-30
+NEX-1093,Pilha AA 4un,Bazar,12.00,24.00,15,10,2028-06-15
+NEX-1094,Carvão 3kg,Bazar,15.00,28.00,40,35,2027-01-01
+NEX-1095,Álcool em Gel,Limpeza,6.50,12.90,25,15,2027-08-15
+NEX-1096,Ração Cão 1kg,Pet,14.00,25.00,20,18,2026-11-15
+NEX-1097,Ração Gato 1kg,Pet,15.00,27.00,15,12,2026-11-15
+NEX-1098,Areia Sanitária,Pet,8.50,16.00,10,8,2028-01-01
+NEX-1099,Petisco Cão,Pet,4.50,9.90,30,25,2026-09-30
+NEX-1100,Brinquedo Pet,Pet,8.00,18.00,25,2,2030-01-01

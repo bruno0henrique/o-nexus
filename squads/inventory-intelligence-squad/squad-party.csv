@@ -1,0 +1,5 @@
+name,title,icon,path
+Elias Economia,Estrategista Financeiro,📊,./agents/elias-economia.agent.md
+Dora Dados,Especialista em ETL,🧹,./agents/dora-dados.agent.md
+Igor Integração,Orquestrador de Pipeline,🔗,./agents/igor-integracao.agent.md
+Sérgio Frontend,Especialista em Desenvolvimento Web,🌐,./agents/sergio-frontend.agent.md

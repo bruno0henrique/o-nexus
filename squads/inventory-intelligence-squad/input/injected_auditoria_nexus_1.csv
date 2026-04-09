@@ -1,0 +1,26 @@
+SKU_ID,Produto,Categoria,Custo (R$),Venda (R$),Estoque,Giro (30d),Vencimento,Status para IA
+NEX-2001,Vinho Tinto,Bebidas,25.00,45.00,45,22,2026-11-15,OK
+NEX-2002,Iogurte Morango,Laticínios,3.20,6.90,12,85,2026-04-08,VENCIMENTO
+NEX-2003,Arroz 5kg,Mercearia,15.00,26.00,88,75,2027-02-10,OK
+NEX-2004,Tomate Kg,Hortifruti,4.00,7.50,15,45,2026-04-07,VENCIMENTO
+NEX-2005,Cerveja Lata,Bebidas,2.50,4.80,550,0,2026-09-30,CAPITAL MORTO
+NEX-2006,Queijo Prato,Laticínios,18.00,32.00,25,18,2026-05-20,OK
+NEX-2007,Feijão Carioca,Mercearia,6.00,4.00,40,35,2026-12-15,PREJUÍZO
+NEX-2008,Banana Prata,Hortifruti,3.50,6.00,0,180,2026-04-09,RUPTURA
+NEX-2009,Leite Integral,Laticínios,3.50,5.20,100,95,2026-08-14,OK
+NEX-2010,Azeite Oliva,Mercearia,28.00,25.00,15,8,2027-01-20,PREJUÍZO
+NEX-2011,Maçã Fuji,Hortifruti,6.00,11.00,22,30,2026-04-08,VENCIMENTO
+NEX-2012,Vinho Tinto,Bebidas,25.00,45.00,0,45,2027-03-10,RUPTURA
+NEX-2013,Iogurte Morango,Laticínios,3.20,6.90,55,40,2026-04-25,OK
+NEX-2014,Arroz 5kg,Mercearia,15.00,26.00,12,110,2026-10-05,OK
+NEX-2015,Tomate Kg,Hortifruti,4.00,7.50,480,0,2026-04-10,CAPITAL MORTO
+NEX-2016,Cerveja Lata,Bebidas,2.50,4.80,200,180,2026-07-15,OK
+NEX-2017,Queijo Prato,Laticínios,18.00,16.00,30,22,2026-06-01,PREJUÍZO
+NEX-2018,Feijão Carioca,Mercearia,6.00,10.50,15,12,2026-04-09,VENCIMENTO
+NEX-2019,Banana Prata,Hortifruti,3.50,6.00,45,50,2026-04-15,OK
+NEX-2020,Leite Integral,Laticínios,3.50,5.20,600,0,2026-05-30,CAPITAL MORTO
+NEX-2021,Azeite Oliva,Mercearia,28.00,52.00,5,12,2027-02-14,OK
+NEX-2022,Maçã Fuji,Hortifruti,6.00,11.00,0,95,2026-04-11,RUPTURA
+NEX-2023,Vinho Tinto,Bebidas,25.00,45.00,30,28,2027-04-01,OK
+NEX-2024,Iogurte Morango,Laticínios,3.20,2.50,80,60,2026-04-15,PREJUÍZO
+NEX-2025,Arroz 5kg,Mercearia,15.00,26.00,510,0,2026-12-20,CAPITAL MORTO

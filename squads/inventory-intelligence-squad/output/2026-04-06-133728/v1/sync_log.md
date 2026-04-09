@@ -1,0 +1,27 @@
+# Sync Log
+
+- Error upserting NEX-2025: {'message': "Could not find the table 'public.estoque' in the schema cache", 'code': 'PGRST205', 'hint': None, 'details': None}
+- Error upserting NEX-2020: {'message': "Could not find the table 'public.estoque' in the schema cache", 'code': 'PGRST205', 'hint': None, 'details': None}
+- Error upserting NEX-2015: {'message': "Could not find the table 'public.estoque' in the schema cache", 'code': 'PGRST205', 'hint': None, 'details': None}
+- Error upserting NEX-2005: {'message': "Could not find the table 'public.estoque' in the schema cache", 'code': 'PGRST205', 'hint': None, 'details': None}
+- Error upserting NEX-2003: {'message': "Could not find the table 'public.estoque' in the schema cache", 'code': 'PGRST205', 'hint': None, 'details': None}
+- Error upserting NEX-2001: {'message': "Could not find the table 'public.estoque' in the schema cache", 'code': 'PGRST205', 'hint': None, 'details': None}
+- Error upserting NEX-2023: {'message': "Could not find the table 'public.estoque' in the schema cache", 'code': 'PGRST205', 'hint': None, 'details': None}
+- Error upserting NEX-2017: {'message': "Could not find the table 'public.estoque' in the schema cache", 'code': 'PGRST205', 'hint': None, 'details': None}
+- Error upserting NEX-2016: {'message': "Could not find the table 'public.estoque' in the schema cache", 'code': 'PGRST205', 'hint': None, 'details': None}
+- Error upserting NEX-2006: {'message': "Could not find the table 'public.estoque' in the schema cache", 'code': 'PGRST205', 'hint': None, 'details': None}
+- Error upserting NEX-2010: {'message': "Could not find the table 'public.estoque' in the schema cache", 'code': 'PGRST205', 'hint': None, 'details': None}
+- Error upserting NEX-2009: {'message': "Could not find the table 'public.estoque' in the schema cache", 'code': 'PGRST205', 'hint': None, 'details': None}
+- Error upserting NEX-2024: {'message': "Could not find the table 'public.estoque' in the schema cache", 'code': 'PGRST205', 'hint': None, 'details': None}
+- Error upserting NEX-2007: {'message': "Could not find the table 'public.estoque' in the schema cache", 'code': 'PGRST205', 'hint': None, 'details': None}
+- Error upserting NEX-2014: {'message': "Could not find the table 'public.estoque' in the schema cache", 'code': 'PGRST205', 'hint': None, 'details': None}
+- Error upserting NEX-2013: {'message': "Could not find the table 'public.estoque' in the schema cache", 'code': 'PGRST205', 'hint': None, 'details': None}
+- Error upserting NEX-2019: {'message': "Could not find the table 'public.estoque' in the schema cache", 'code': 'PGRST205', 'hint': None, 'details': None}
+- Error upserting NEX-2021: {'message': "Could not find the table 'public.estoque' in the schema cache", 'code': 'PGRST205', 'hint': None, 'details': None}
+- Error upserting NEX-2011: {'message': "Could not find the table 'public.estoque' in the schema cache", 'code': 'PGRST205', 'hint': None, 'details': None}
+- Error upserting NEX-2018: {'message': "Could not find the table 'public.estoque' in the schema cache", 'code': 'PGRST205', 'hint': None, 'details': None}
+- Error upserting NEX-2004: {'message': "Could not find the table 'public.estoque' in the schema cache", 'code': 'PGRST205', 'hint': None, 'details': None}
+- Error upserting NEX-2002: {'message': "Could not find the table 'public.estoque' in the schema cache", 'code': 'PGRST205', 'hint': None, 'details': None}
+- Error upserting NEX-2008: {'message': "Could not find the table 'public.estoque' in the schema cache", 'code': 'PGRST205', 'hint': None, 'details': None}
+- Error upserting NEX-2012: {'message': "Could not find the table 'public.estoque' in the schema cache", 'code': 'PGRST205', 'hint': None, 'details': None}
+- Error upserting NEX-2022: {'message': "Could not find the table 'public.estoque' in the schema cache", 'code': 'PGRST205', 'hint': None, 'details': None}

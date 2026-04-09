@@ -1,0 +1,51 @@
+{
+  "row_count": 25,
+  "missing_per_column": {
+    "SKU_ID": 0,
+    "Produto": 0,
+    "Categoria": 0,
+    "Custo (R$)": 0,
+    "Venda (R$)": 0,
+    "Estoque": 0,
+    "Giro (30d)": 0,
+    "Vencimento": 0,
+    "Status para IA": 0
+  },
+  "anomalies_sample": [
+    {
+      "row": 4,
+      "column": "Giro (30d)",
+      "value": 0.0
+    },
+    {
+      "row": 7,
+      "column": "Estoque",
+      "value": 0.0
+    },
+    {
+      "row": 11,
+      "column": "Estoque",
+      "value": 0.0
+    },
+    {
+      "row": 14,
+      "column": "Giro (30d)",
+      "value": 0.0
+    },
+    {
+      "row": 19,
+      "column": "Giro (30d)",
+      "value": 0.0
+    },
+    {
+      "row": 21,
+      "column": "Estoque",
+      "value": 0.0
+    },
+    {
+      "row": 24,
+      "column": "Giro (30d)",
+      "value": 0.0
+    }
+  ]
+}

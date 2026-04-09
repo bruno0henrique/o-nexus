@@ -1,0 +1,35 @@
+squad_code: "inventory-intelligence-squad"
+purpose: "pegar dados csv ou outro dados referente a estoque, limpar e organizar, analisar, separar em um json, mostrar um arquivo organizado para eu conferir e dar um ok, subir no banco de dados e por fim, criar um banco de dados local usando um dashboard de dados, buscando otimizar o tempo do cliente (mostrando prioridades ABC, atividades urgentes, coisas que podem ser feitas, recomendações etc.)"
+domain: "analysis"
+
+company:
+  name: "O NEXUS | OneSquad"
+  tone: "Tecnológico, seguro, executivo e voltado totalmente à resultados financeiros tangíveis."
+  products: "Interface de entrega de valor para o cliente final e Motor de processamento de dados."
+
+language: "pt-br"
+
+context:
+  data_sources: "CSV local principalmente, com flexibilidade para outros formatos."
+  decisions: "Prioridades ABC, atividades urgentes (vencimento, falta de estoque), capital parado, promoção de peças paradas."
+  output_format: "JSON estruturado, arquivo organizado para conferência manual, dashboard local e Supabase."
+
+tools_needed:
+  - "csv-parser"
+  - "supabase-client"
+  - "json-exporter"
+
+investigation:
+  enabled: true
+  profiles:
+    - url: "https://www.aboutamazon.com/news/operations/how-amazon-uses-ai-to-predict-what-you-want-before-you-buy-it"
+      platform: "web"
+      investigation_mode: "analysis"
+    - url: "https://www.zara.com/static/content/about-us/stock-management"
+      platform: "web"
+      investigation_mode: "analysis"
+    - url: "https://www.ocadogroup.com/technology/zero-food-waste"
+      platform: "web"
+      investigation_mode: "analysis"
+
+target_formats: []

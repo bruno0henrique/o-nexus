@@ -1,0 +1,28 @@
+squad_code: "inventory-intelligence-squad"
+name: "Inventory Intelligence Squad"
+description: "Especialistas em transformar dados de estoque em lucro, utilizando estratégias de gigantes como Amazon e Zara."
+icon: "📦"
+
+skills:
+  - web_search
+  - web_fetch
+  - code_execution
+
+data:
+  - pipeline/data/research-brief.md
+  - pipeline/data/domain-framework.md
+  - pipeline/data/quality-criteria.md
+  - pipeline/data/output-examples.md
+  - pipeline/data/anti-patterns.md
+
+pipeline:
+  trigger: "on_file_arrival"
+  input_dir: "squads/inventory-intelligence-squad/input/"
+  steps:
+    - step-01-ingest.md
+    - step-02-sanitize.md
+    - step-03-audit.md
+    - step-04-checkpoint.md
+    - step-05-persist.md
+    - step-06-dashboard.md
+    - step-07-visual-dashboard.md

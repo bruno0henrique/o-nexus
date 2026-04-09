@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus Estoque Pro - Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="min-h-screen">
+    <header class="header">
+        <div class="header-content">
+            <div class="logo-section">
+                <div class="logo glow">
+                    <span class="font-display font-bold text-white">N</span>
+                </div>
+                <div>
+                    <h1 class="font-display title">Nexus Estoque Pro</h1>
+                    <p class="subtitle">Dashboard de Fluxo - Auditoria Industrial</p>
+                </div>
+            </div>
+            <div class="execution-info">
+                <span class="text-gray-400">Execução:</span>
+                <span class="font-medium">#007 | 27/03/2026</span>
+            </div>
+        </div>
+        <div class="gradient-border"></div>
+    </header>
+
+    <main class="main-content">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="font-display card-title">
+                    📋 Movimentação Consolidada
+                    <span class="text-sm font-normal text-gray-400">(14 itens)</span>
+                </h3>
+                <div class="filter-section">
+                    <button class="filter-btn active" data-filter="all">Todos</button>
+                    <button class="filter-btn" data-filter="OK">Validados</button>
+                    <button class="filter-btn" data-filter="ERRO">Erros</button>
+                </div>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead>
+                        <tr class="border-b border-gray-700">
+                            <th class="text-left py-3 px-4 text-sm font-medium text-gray-400">SKU</th>
+                            <th class="text-left py-3 px-4 text-sm font-medium text-gray-400">Original IDs</th>
+                            <th class="text-left py-3 px-4 text-sm font-medium text-gray-400">Entradas</th>
+                            <th class="text-left py-3 px-4 text-sm font-medium text-gray-400">Saídas</th>
+                            <th class="text-left py-3 px-4 text-sm font-medium text-gray-400">Saldo</th>
+                            <th class="text-left py-3 px-4 text-sm font-medium text-gray-400">Valor Total</th>
+                            <th class="text-left py-3 px-4 text-sm font-medium text-gray-400">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="inventoryTable"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="kpi-grid">
+            <div class="card" data-kpi="entries">
+                <div class="flex items-center justify-between mb-4">
+                    <span class="text-sm text-gray-400">Total Entradas</span>
+                    <span class="status-dot status-stable"></span>
+                </div>
+                <div class="kpi-value text-3xl mb-1">32.702</div>
+                <p class="text-xs text-gray-500">Unidades entradas</p>
+            </div>
+            <div class="card" data-kpi="exits">
+                <div class="flex items-center justify-between mb-4">
+                    <span class="text-sm text-gray-400">Total Saídas</span>
+                    <span class="status-dot status-warning"></span>
+                </div>
+                <div class="kpi-value text-3xl mb-1">26.343</div>
+                <p class="text-xs text-gray-500">Unidades saída</p>
+            </div>
+            <div class="card" data-kpi="balance">
+                <div class="flex items-center justify-between mb-4">
+                    <span class="text-sm text-gray-400">Saldo Final</span>
+                    <span class="status-dot status-critical"></span>
+                </div>
+                <div class="kpi-value text-3xl mb-1">4.859</div>
+                <p class="text-xs text-gray-500">Unidades em estoque</p>
+            </div>
+            <div class="card" data-kpi="capital">
+                <div class="flex items-center justify-between mb-4">
+                    <span class="text-sm text-gray-400">Valor Total</span>
+                    <span class="status-dot status-stable"></span>
+                </div>
+                <div class="kpi-value text-3xl mb-1">R$ 7.11M</div>
+                <p class="text-xs text-gray-500">Capital imobilizado</p>
+            </div>
+        </div>
+
+        <div class="charts-grid">
+            <div class="card chart-card" onclick="toggleChart(this)" data-chart="balance">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="font-display text-lg font-semibold">Saldo por Item</h3>
+                    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg>
+                </div>
+                <div class="chart-container">
+                    <canvas id="balanceChart"></canvas>
+                </div>
+                <p class="text-xs text-gray-500 mt-4 text-center">Clique para expandir</p>
+            </div>
+            <div class="card chart-card" onclick="toggleChart(this)" data-chart="flow">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="font-display text-lg font-semibold">Entrada vs Saída</h3>
+                    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg>
+                </div>
+                <div class="chart-container">
+                    <canvas id="flowChart"></canvas>
+                </div>
+                <p class="text-xs text-gray-500 mt-4 text-center">Clique para expandir</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3 class="font-display card-title">⚠️ Erros de Auditoria</h3>
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead>
+                        <tr class="border-b border-gray-700">
+                            <th class="text-left py-3 px-4 text-sm font-medium text-gray-400">SKU</th>
+                            <th class="text-left py-3 px-4 text-sm font-medium text-gray-400">Problema</th>
+                            <th class="text-left py-3 px-4 text-sm font-medium text-gray-400">Ação</th>
+                        </tr>
+                    </thead>
+                    <tbody id="errorTable"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3 class="font-display card-title">
+                <span class="status-dot status-warning"></span>
+                IDs Suspeitos - Conciliação
+            </h3>
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead>
+                        <tr class="border-b border-gray-700">
+                            <th class="text-left py-3 px-4 text-sm font-medium text-gray-400">SKU Normalizado</th>
+                            <th class="text-left py-3 px-4 text-sm font-medium text-gray-400">IDs Originais</th>
+                            <th class="text-left py-3 px-4 text-sm font-medium text-gray-400">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="suspiciousTable"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="summary-grid">
+            <div class="card">
+                <h4 class="font-display font-semibold mb-4 text-blue-400">💡 Recomendações</h4>
+                <ul class="space-y-3 text-sm text-gray-300">
+                    <li class="flex gap-2"><span class="text-red-400">⚠</span> Investigar saldo negativo SENS-LSR-01 (-1981)</li>
+                    <li class="flex gap-2"><span class="text-red-400">⚠</span> Revisar ID BRG-62O4 vs BRG-6204 (O vs 0)</li>
+                    <li class="flex gap-2"><span class="text-red-400">⚠</span> Corrigir FAN-COOL-O2 vs FAN-COOL-02</li>
+                    <li class="flex gap-2"><span class="text-yellow-400">⚠</span> Consolidar IDs com variações similares</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h4 class="font-display font-semibold mb-4 text-purple-400">📊 Auditoria</h4>
+                <ul class="space-y-3 text-sm text-gray-300">
+                    <li class="flex gap-2"><span class="text-blue-400">•</span> 1000 linhas processadas</li>
+                    <li class="flex gap-2"><span class="text-blue-400">•</span> 14 IDs únicos consolidados</li>
+                    <li class="flex gap-2"><span class="text-blue-400">•</span> 7 IDs com variações</li>
+                    <li class="flex gap-2"><span class="text-blue-400">•</span> 5 saldos negativos</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h4 class="font-display font-semibold mb-4 text-green-400">🎯 Próximos Passos</h4>
+                <ul class="space-y-3 text-sm text-gray-300">
+                    <li class="flex gap-2"><span class="text-yellow-400">1.</span> Contagem física items negativos</li>
+                    <li class="flex gap-2"><span class="text-yellow-400">2.</span> Corrigir IDs com O/0 e I/l</li>
+                    <li class="flex gap-2"><span class="text-yellow-400">3.</span> Validar registros SENS-LSR</li>
+                    <li class="flex gap-2"><span class="text-yellow-400">4.</span> Nova auditoria 30 dias</li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="text-center text-sm text-gray-500">
+            <p>Gerado por <span class="text-blue-400">Nexus Estoque Pro</span> • Protocolo de Auditoria Industrial</p>
+        </div>
+    </footer>
+
+    <script src="data.js"></script>
+    <script src="scripts.js"></script>
+</body>
+</html>

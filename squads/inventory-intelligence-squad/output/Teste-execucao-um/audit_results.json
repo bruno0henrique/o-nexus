@@ -1,0 +1,34 @@
+{
+  "row_count": 12,
+  "missing_per_column": {
+    "loja_id": 0,
+    "sku_id": 0,
+    "produto": 0,
+    "categoria": 0,
+    "marca": 0,
+    "setor": 0,
+    "preco_custo": 0,
+    "preco_venda": 0,
+    "preco_promocional": 10,
+    "estoque_atual": 0,
+    "giro_30d": 0,
+    "data_vencimento": 0
+  },
+  "anomalies_sample": [
+    {
+      "row": 1,
+      "column": "estoque_atual",
+      "value": 0.0
+    },
+    {
+      "row": 4,
+      "column": "giro_30d",
+      "value": 0.0
+    },
+    {
+      "row": 8,
+      "column": "estoque_atual",
+      "value": 0.0
+    }
+  ]
+}

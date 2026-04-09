@@ -1,0 +1,1 @@
+inject_path: squads/inventory-intelligence-squad/input/auditoria_nexus_1.csv

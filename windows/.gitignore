@@ -1,0 +1,32 @@
+# Chaves e Segredos
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Flutter/Dart
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+build/
+flutter/ephemeral/
+
+# Web
+.vercel
+.netlify
+
+# Visual Studio user-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Visual Studio build-related files
+x64/
+x86/
+
+# Visual Studio cache files
+*.[Cc]ache
+!*.[Cc]ache/

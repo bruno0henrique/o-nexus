@@ -1,0 +1,47 @@
+RESUMO EXECUTIVO - AUDITORIA ESTOQUE
+==========================================
+Data: 2026-03-27
+Execução: execution-07-2026-03-27
+
+CHECKPOINT:
+- Linhas lidas: 1000
+- Linhas consolidadas: 14
+- Status: OK (1000 dados + 1 header = 1001)
+
+REGRA 1 - INTEGRIDADE DE IDs:
+- Total items únicos: 14
+- IDs com variações: 7
+  - BRG-6204: BRG-6204, BRG_6204, brg-6204
+  - FAN-COOL-02: FAN-COOL-02, FAN_COOL_02, fan-cool-02
+  - KADAC-TX90: KADAC-TX90, KADAC_TX90, kadac-tx90
+  - PLC-NEX-01: PLC-NEX-01, PLC_NEX_01, plc-nex-01
+  - SENS-LSR-01: SENS-LSR-01, SENS_LSR_01, sens-lsr-01
+  - SRV-5000-X: SRV-5000-X, SRV_5000_X, srv-5000-x
+  - WIR-RED-50M: WIR-RED-50M, WIR_RED_50M, wir-red-50m
+
+REGRA 2 - SALDOS:
+- Total Entradas: 41702
+- Total Saídas: 35065
+- Saldo Total: 6637
+- Saldos negativos: 5
+  ERRO: ERRO SALDO NEGATIVO: BRG-62O4 = -123.0
+  ERRO: ERRO SALDO NEGATIVO: FAN-COOL-O2 = -46.0
+  ERRO: ERRO SALDO NEGATIVO: PLC-NEX-O1 = -68.0
+  ERRO: ERRO SALDO NEGATIVO: SENS-LSR-01 = -1981.0
+  ERRO: ERRO SALDO NEGATIVO: SRV-5OOO-X = -261.0
+
+REGRA 3 - VALORAÇÃO:
+- Valor Total Estoque: R$ 7110818.23
+- Total de itens: 14
+
+ARQUIVOS GERADOS:
+- index.html
+- styles.css
+- scripts.js
+- README.md
+- data.csv
+- final-report.md
+- resumo/index.html
+- resumo/styles.css
+- resumo/scripts.js
+- resumo/resumo.txt
