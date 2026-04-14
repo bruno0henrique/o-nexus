@@ -98,169 +98,216 @@ class _FleetManagementScreenState extends State<FleetManagementScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppTheme.background,
-      body: Padding(
-        padding: const EdgeInsets.fromLTRB(28, 24, 28, 16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // ── Cabeçalho ──────────────────────────────────────────────
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.end,
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          final isMobile = constraints.maxWidth < 640;
+          return Padding(
+            padding: EdgeInsets.fromLTRB(
+                isMobile ? 16 : 28, 24, isMobile ? 16 : 28, 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'FLEET MANAGEMENT',
-                      style: TextStyle(
-                        fontSize: 10,
-                        color: AppTheme.primaryTeal,
-                        letterSpacing: 2.5,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(height: 4),
-                    Text(
-                      'Lojas Cadastradas',
-                      style: TextStyle(
-                        fontSize: 26,
-                        fontWeight: FontWeight.bold,
-                        color: AppTheme.textWhite,
-                      ),
-                    ),
-                  ],
-                ),
-                ElevatedButton.icon(
-                  onPressed: _openRegister,
-                  icon: const Icon(Icons.storefront, size: 16),
-                  label: const Text('Cadastrar Nova Loja'),
-                ),
-              ],
-            ),
-            const SizedBox(height: 24),
-
-            // ── Busca ───────────────────────────────────────────────────
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 2),
-              decoration: BoxDecoration(
-                color: AppTheme.darkPanel,
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: AppTheme.accentGray),
-              ),
-              child: Row(
-                children: [
-                  const Icon(Icons.filter_list, color: AppTheme.textGray, size: 18),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: TextField(
-                      controller: _searchCtrl,
-                      style: const TextStyle(color: AppTheme.textWhite, fontSize: 13),
-                      decoration: const InputDecoration(
-                        hintText: 'Filtrar por nome ou CNPJ...',
-                        hintStyle: TextStyle(color: AppTheme.textGray),
-                        border: InputBorder.none,
-                        isDense: true,
-                        contentPadding: EdgeInsets.symmetric(vertical: 10),
-                      ),
+                // ── Cabeçalho ──────────────────────────────────────────────
+                if (isMobile) ...[
+                  const Text(
+                    'FLEET MANAGEMENT',
+                    style: TextStyle(
+                      fontSize: 10,
+                      color: AppTheme.primaryTeal,
+                      letterSpacing: 2.5,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
-                  if (_searchCtrl.text.isNotEmpty)
-                    GestureDetector(
-                      onTap: () {
-                        _searchCtrl.clear();
-                        _applyFilter();
-                      },
-                      child: const Icon(Icons.close, color: AppTheme.textGray, size: 16),
+                  const SizedBox(height: 4),
+                  const Text(
+                    'Lojas Cadastradas',
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: AppTheme.textWhite,
                     ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 16),
-
-            // ── Cabeçalho da tabela ─────────────────────────────────────
-            Container(
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
-              decoration: const BoxDecoration(
-                border: Border(bottom: BorderSide(color: AppTheme.accentGray)),
-              ),
-              child: const Row(
-                children: [
+                  ),
+                  const SizedBox(height: 12),
                   SizedBox(
-                    width: 88,
-                    child: Text('ID', style: _headerStyle),
+                    width: double.infinity,
+                    child: ElevatedButton.icon(
+                      onPressed: _openRegister,
+                      icon: const Icon(Icons.storefront, size: 16),
+                      label: const Text('Cadastrar Nova Loja'),
+                    ),
                   ),
-                  Expanded(
-                    flex: 3,
-                    child: Text('NOME DA LOJA', style: _headerStyle),
-                  ),
-                  Expanded(
-                    flex: 2,
-                    child: Text('CNPJ', style: _headerStyle),
-                  ),
-                  SizedBox(
-                    width: 92,
-                    child: Text('STATUS', style: _headerStyle),
-                  ),
-                  SizedBox(
-                    width: 136,
-                    child: Text('AÇÕES', style: _headerStyle),
-                  ),
-                ],
-              ),
-            ),
-
-            // ── Conteúdo ────────────────────────────────────────────────
-            Expanded(
-              child: _isLoading
-                  ? const Center(
-                      child: CircularProgressIndicator(color: AppTheme.primaryTeal),
-                    )
-                  : _error != null
-                      ? Center(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              const Icon(Icons.error_outline,
-                                  color: AppTheme.criticalRed, size: 36),
-                              const SizedBox(height: 8),
-                              Text('Erro: $_error',
-                                  style: const TextStyle(
-                                      color: AppTheme.criticalRed)),
-                              const SizedBox(height: 12),
-                              OutlinedButton(
-                                onPressed: _loadStores,
-                                child: const Text('Tentar novamente'),
-                              ),
-                            ],
+                ] else
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      const Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'FLEET MANAGEMENT',
+                            style: TextStyle(
+                              fontSize: 10,
+                              color: AppTheme.primaryTeal,
+                              letterSpacing: 2.5,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
+                          SizedBox(height: 4),
+                          Text(
+                            'Lojas Cadastradas',
+                            style: TextStyle(
+                              fontSize: 26,
+                              fontWeight: FontWeight.bold,
+                              color: AppTheme.textWhite,
+                            ),
+                          ),
+                        ],
+                      ),
+                      ElevatedButton.icon(
+                        onPressed: _openRegister,
+                        icon: const Icon(Icons.storefront, size: 16),
+                        label: const Text('Cadastrar Nova Loja'),
+                      ),
+                    ],
+                  ),
+                const SizedBox(height: 24),
+
+                // ── Busca ───────────────────────────────────────────────────
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 14, vertical: 2),
+                  decoration: BoxDecoration(
+                    color: AppTheme.darkPanel,
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: AppTheme.accentGray),
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.filter_list,
+                          color: AppTheme.textGray, size: 18),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: TextField(
+                          controller: _searchCtrl,
+                          style: const TextStyle(
+                              color: AppTheme.textWhite, fontSize: 13),
+                          decoration: const InputDecoration(
+                            hintText: 'Filtrar por nome ou CNPJ...',
+                            hintStyle: TextStyle(color: AppTheme.textGray),
+                            border: InputBorder.none,
+                            isDense: true,
+                            contentPadding:
+                                EdgeInsets.symmetric(vertical: 10),
+                          ),
+                        ),
+                      ),
+                      if (_searchCtrl.text.isNotEmpty)
+                        GestureDetector(
+                          onTap: () {
+                            _searchCtrl.clear();
+                            _applyFilter();
+                          },
+                          child: const Icon(Icons.close,
+                              color: AppTheme.textGray, size: 16),
+                        ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 16),
+
+                // ── Cabeçalho da tabela (apenas desktop) ────────────────────
+                if (!isMobile)
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 12),
+                    decoration: const BoxDecoration(
+                      border:
+                          Border(bottom: BorderSide(color: AppTheme.accentGray)),
+                    ),
+                    child: const Row(
+                      children: [
+                        SizedBox(
+                          width: 88,
+                          child: Text('ID', style: _headerStyle),
+                        ),
+                        Expanded(
+                          flex: 3,
+                          child: Text('NOME DA LOJA', style: _headerStyle),
+                        ),
+                        Expanded(
+                          flex: 2,
+                          child: Text('CNPJ', style: _headerStyle),
+                        ),
+                        SizedBox(
+                          width: 92,
+                          child: Text('STATUS', style: _headerStyle),
+                        ),
+                        SizedBox(
+                          width: 100,
+                          child: Text('AÇÕES', style: _headerStyle),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                // ── Conteúdo ────────────────────────────────────────────────
+                Expanded(
+                  child: _isLoading
+                      ? const Center(
+                          child: CircularProgressIndicator(
+                              color: AppTheme.primaryTeal),
                         )
-                      : _filtered.isEmpty
-                          ? const Center(
-                              child: Text(
-                                'Nenhuma loja encontrada.',
-                                style: TextStyle(color: AppTheme.textGray),
+                      : _error != null
+                          ? Center(
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const Icon(Icons.error_outline,
+                                      color: AppTheme.criticalRed, size: 36),
+                                  const SizedBox(height: 8),
+                                  Text('Erro: $_error',
+                                      style: const TextStyle(
+                                          color: AppTheme.criticalRed)),
+                                  const SizedBox(height: 12),
+                                  OutlinedButton(
+                                    onPressed: _loadStores,
+                                    child: const Text('Tentar novamente'),
+                                  ),
+                                ],
                               ),
                             )
-                          : ListView.builder(
-                              itemCount: _filtered.length,
-                              itemBuilder: (ctx, i) =>
-                                  _buildRow(_filtered[i], i),
-                            ),
-            ),
-
-            // ── Rodapé de contagem ───────────────────────────────────────
-            if (!_isLoading && _error == null)
-              Padding(
-                padding: const EdgeInsets.only(top: 10),
-                child: Text(
-                  'Exibindo ${_filtered.length} de ${_stores.length} '
-                  'loja${_stores.length == 1 ? '' : 's'}',
-                  style: const TextStyle(color: AppTheme.textGray, fontSize: 11),
+                          : _filtered.isEmpty
+                              ? const Center(
+                                  child: Text(
+                                    'Nenhuma loja encontrada.',
+                                    style:
+                                        TextStyle(color: AppTheme.textGray),
+                                  ),
+                                )
+                              : ListView.builder(
+                                  itemCount: _filtered.length,
+                                  itemBuilder: (ctx, i) => isMobile
+                                      ? _buildMobileCard(_filtered[i], i)
+                                      : _buildRow(_filtered[i], i),
+                                ),
                 ),
-              ),
-          ],
-        ),
+
+                // ── Rodapé de contagem ───────────────────────────────────────
+                if (!_isLoading && _error == null)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: Text(
+                      'Exibindo ${_filtered.length} de ${_stores.length} '
+                      'loja${_stores.length == 1 ? '' : 's'}',
+                      style: const TextStyle(
+                          color: AppTheme.textGray, fontSize: 11),
+                    ),
+                  ),
+              ],
+            ),
+          );
+        },
       ),
     );
   }
@@ -305,7 +352,7 @@ class _FleetManagementScreenState extends State<FleetManagementScreen> {
           Expanded(
             flex: 2,
             child: Text(
-              cnpj,
+              _maskCnpj(cnpj),
               style: const TextStyle(color: AppTheme.textGray, fontSize: 12),
             ),
           ),
@@ -322,42 +369,111 @@ class _FleetManagementScreenState extends State<FleetManagementScreen> {
             ),
           ),
           SizedBox(
-            width: 136,
-            child: Row(
-              children: [
-                Expanded(
-                  child: OutlinedButton(
-                    onPressed: () => _openDetails(store),
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: AppTheme.primaryTeal,
-                      side: const BorderSide(color: AppTheme.primaryTeal),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 4),
-                      textStyle: const TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: 0.5),
-                      minimumSize: const Size(0, 30),
-                    ),
-                    child: const Text('GERENCIAR'),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                InkWell(
-                  onTap: () => _openDetails(store),
-                  borderRadius: BorderRadius.circular(4),
-                  child: const Icon(
-                    Icons.visibility_outlined,
-                    color: AppTheme.textGray,
-                    size: 18,
-                  ),
-                ),
-              ],
+            width: 100,
+            child: OutlinedButton(
+              onPressed: () => _openDetails(store),
+              style: OutlinedButton.styleFrom(
+                foregroundColor: AppTheme.primaryTeal,
+                side: const BorderSide(color: AppTheme.primaryTeal),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                textStyle: const TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 0.5),
+                minimumSize: const Size(0, 30),
+              ),
+              child: const Text('GERENCIAR'),
             ),
           ),
         ],
       ),
     );
+  }
+
+  Widget _buildMobileCard(Map<String, dynamic> store, int index) {
+    final id = '${store['id'] ?? ''}';
+    final nome = '${store['nome_loja'] ?? '-'}';
+    final cnpj = '${store['cnpj'] ?? '-'}';
+
+    return Container(
+      margin: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: AppTheme.darkPanel,
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: AppTheme.accentGray, width: 0.5),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                _nxId(id),
+                style: const TextStyle(
+                  color: AppTheme.primaryTeal,
+                  fontFamily: 'monospace',
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const Row(
+                children: [
+                  _StatusDot(online: true),
+                  SizedBox(width: 6),
+                  Text('Ativo',
+                      style:
+                          TextStyle(color: Color(0xFF00FF66), fontSize: 11)),
+                ],
+              ),
+            ],
+          ),
+          const SizedBox(height: 6),
+          Text(
+            nome,
+            style: const TextStyle(
+              color: AppTheme.textWhite,
+              fontSize: 15,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            _maskCnpj(cnpj),
+            style: const TextStyle(color: AppTheme.textGray, fontSize: 12),
+          ),
+          const SizedBox(height: 12),
+          SizedBox(
+            width: double.infinity,
+            child: OutlinedButton(
+              onPressed: () => _openDetails(store),
+              style: OutlinedButton.styleFrom(
+                foregroundColor: AppTheme.primaryTeal,
+                side: const BorderSide(color: AppTheme.primaryTeal),
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                textStyle: const TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 0.5),
+              ),
+              child: const Text('GERENCIAR'),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  String _maskCnpj(String raw) {
+    if (raw == '-') return raw;
+    final digits = raw.replaceAll(RegExp(r'[^\d]'), '');
+    if (digits.length == 14) {
+      return '${digits.substring(0, 2)}.***.****/****-${digits.substring(12)}';
+    }
+    if (raw.length <= 4) return raw;
+    return '${raw.substring(0, 2)}${'*' * (raw.length - 4)}${raw.substring(raw.length - 2)}';
   }
 }
 

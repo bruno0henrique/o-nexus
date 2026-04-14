@@ -428,43 +428,77 @@ class _StoreRegistrationScreenState extends State<StoreRegistrationScreen> {
                           icon: Icons.map_outlined,
                         ),
                         const SizedBox(height: 12),
-                        Row(
-                          children: [
-                            Expanded(
-                              flex: 2,
-                              child: _buildTextField(
-                                controller: _numeroCtrl,
-                                label: 'Número *',
-                                hint: 'Nº',
-                                icon: Icons.format_list_numbered,
-                                validator: (v) => _requiredField(v, 'Número'),
+                        LayoutBuilder(builder: (context, constraints) {
+                          final narrow = constraints.maxWidth < 520;
+                          if (narrow) {
+                            return Column(
+                              children: [
+                                _buildTextField(
+                                  controller: _numeroCtrl,
+                                  label: 'Número *',
+                                  hint: 'Nº',
+                                  icon: Icons.format_list_numbered,
+                                  validator: (v) => _requiredField(v, 'Número'),
+                                ),
+                                const SizedBox(height: 12),
+                                _buildTextField(
+                                  controller: _cidadeCtrl,
+                                  label: 'Cidade *',
+                                  hint: 'Cidade',
+                                  icon: Icons.location_city_outlined,
+                                  validator: (v) => _requiredField(v, 'Cidade'),
+                                ),
+                                const SizedBox(height: 12),
+                                _buildDropdownField(
+                                  label: 'UF *',
+                                  value: _uf,
+                                  items: _ufs,
+                                  icon: Icons.map_outlined,
+                                  validator: (v) => v == null || v.isEmpty ? 'Escolha UF' : null,
+                                  onChanged: (v) => setState(() => _uf = v),
+                                ),
+                              ],
+                            );
+                          }
+
+                          return Row(
+                            children: [
+                              Expanded(
+                                flex: 2,
+                                child: _buildTextField(
+                                  controller: _numeroCtrl,
+                                  label: 'Número *',
+                                  hint: 'Nº',
+                                  icon: Icons.format_list_numbered,
+                                  validator: (v) => _requiredField(v, 'Número'),
+                                ),
                               ),
-                            ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              flex: 4,
-                              child: _buildTextField(
-                                controller: _cidadeCtrl,
-                                label: 'Cidade *',
-                                hint: 'Cidade',
-                                icon: Icons.location_city_outlined,
-                                validator: (v) => _requiredField(v, 'Cidade'),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                flex: 4,
+                                child: _buildTextField(
+                                  controller: _cidadeCtrl,
+                                  label: 'Cidade *',
+                                  hint: 'Cidade',
+                                  icon: Icons.location_city_outlined,
+                                  validator: (v) => _requiredField(v, 'Cidade'),
+                                ),
                               ),
-                            ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              flex: 2,
-                              child: _buildDropdownField(
-                                label: 'UF *',
-                                value: _uf,
-                                items: _ufs,
-                                icon: Icons.map_outlined,
-                                validator: (v) => v == null || v.isEmpty ? 'Escolha UF' : null,
-                                onChanged: (v) => setState(() => _uf = v),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                flex: 2,
+                                child: _buildDropdownField(
+                                  label: 'UF *',
+                                  value: _uf,
+                                  items: _ufs,
+                                  icon: Icons.map_outlined,
+                                  validator: (v) => v == null || v.isEmpty ? 'Escolha UF' : null,
+                                  onChanged: (v) => setState(() => _uf = v),
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
+                            ],
+                          );
+                        }),
 
                         const SizedBox(height: 18),
                         _buildSectionLabel('CONTATO E GESTÃO'),
@@ -748,16 +782,21 @@ class _StoreRegistrationScreenState extends State<StoreRegistrationScreen> {
       'Enterprise': 'Ilimitado',
     };
 
-    return Row(
-      children: [
-        for (int i = 0; i < plans.length; i++) ...[
-          if (i > 0) const SizedBox(width: 10),
-          Expanded(
+    return LayoutBuilder(builder: (context, constraints) {
+      final narrow = constraints.maxWidth < 520;
+      final itemWidth = narrow ? double.infinity : (constraints.maxWidth - 20) / plans.length;
+
+      return Wrap(
+        spacing: 10,
+        runSpacing: 10,
+        children: List.generate(plans.length, (i) {
+          return SizedBox(
+            width: itemWidth,
             child: GestureDetector(
               onTap: () => setState(() => _plano = plans[i]),
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 200),
-                padding: const EdgeInsets.symmetric(vertical: 16),
+                padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 12),
                 decoration: BoxDecoration(
                   color: _plano == plans[i] ? AppTheme.teal10 : AppTheme.darkerPanel,
                   borderRadius: BorderRadius.circular(10),
@@ -767,6 +806,7 @@ class _StoreRegistrationScreenState extends State<StoreRegistrationScreen> {
                   ),
                 ),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
                       plans[i],
@@ -776,13 +816,13 @@ class _StoreRegistrationScreenState extends State<StoreRegistrationScreen> {
                         fontSize: 13,
                       ),
                     ),
-                    const SizedBox(height: 4),
+                    const SizedBox(height: 6),
                     Text(
                       plansInfo[plans[i]]!,
-                      style: const TextStyle(color: AppTheme.textGray, fontSize: 10),
+                      style: const TextStyle(color: AppTheme.textGray, fontSize: 11),
                     ),
                     if (_plano == plans[i]) ...[
-                      const SizedBox(height: 6),
+                      const SizedBox(height: 8),
                       Container(
                         width: 6,
                         height: 6,
@@ -796,10 +836,10 @@ class _StoreRegistrationScreenState extends State<StoreRegistrationScreen> {
                 ),
               ),
             ),
-          ),
-        ],
-      ],
-    );
+          );
+        }),
+      );
+    });
   }
 
   Widget _buildSubmitButton() {

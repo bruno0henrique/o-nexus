@@ -6,7 +6,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 ///
 /// As credenciais são lidas automaticamente do arquivo `.env`:
 ///   SUPABASE_URL e SUPABASE_ANON_KEY
-final supabase = Supabase.instance.client;
+SupabaseClient get supabase => Supabase.instance.client;
 
 /// Retorna a URL do Supabase configurada no .env
 String get supabaseUrl => dotenv.env['SUPABASE_URL']!;

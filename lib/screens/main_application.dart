@@ -7,6 +7,7 @@ import 'package:nexus_engine/screens/statistics_view.dart';
 import 'package:nexus_engine/screens/contracts_view.dart';
 import 'package:nexus_engine/screens/fleet_management_screen.dart';
 import 'package:nexus_engine/screens/store_registration_screen.dart';
+import 'package:nexus_engine/screens/billing_screen.dart';
 import 'package:nexus_engine/theme/app_theme.dart';
 import 'package:flutter/services.dart';
 import 'package:nexus_engine/services/admin_service.dart';
@@ -194,6 +195,59 @@ class _MainApplicationState extends State<MainApplication> {
               },
             ),
           ),
+          // Botão de seleção de loja no rodapé do Drawer — apenas em Admin Mode mobile
+          if (isAdminMode)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
+              child: InkWell(
+                onTap: _openStoreSelector,
+                borderRadius: BorderRadius.circular(8),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                  decoration: BoxDecoration(
+                    color: AppTheme.teal10,
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: AppTheme.primaryTeal.withValues(alpha: 0.28)),
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.storefront, color: AppTheme.primaryTeal, size: 17),
+                      const SizedBox(width: 6),
+                      Flexible(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Text(
+                              'LOJA ATIVA',
+                              style: TextStyle(
+                                color: AppTheme.textGray,
+                                fontSize: 8,
+                                letterSpacing: 0.5,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            Text(
+                              _selectedStoreName ?? 'Selecionar loja',
+                              style: const TextStyle(
+                                color: AppTheme.textWhite,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w700,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: 6),
+                      const Icon(Icons.swap_horiz, color: AppTheme.primaryTeal, size: 15),
+                    ],
+                  ),
+                ),
+              ),
+            ),
           // Settings button at bottom
           Padding(
             padding: const EdgeInsets.only(bottom: 12.0),
@@ -334,7 +388,7 @@ class _MainApplicationState extends State<MainApplication> {
         return _buildPlaceholder(Icons.history);
       }
       if (_selectedIndex == 4) {
-        return _buildPlaceholder(Icons.payments_outlined);
+        return const BillingScreen();
       }
       if (_selectedIndex == 5) {
         return _buildPlaceholder(Icons.query_stats);
@@ -546,76 +600,96 @@ class _MainApplicationState extends State<MainApplication> {
     return '${id.substring(0, 8)}…${id.substring(id.length - 4)}';
   }
 
-  Widget _buildSelectedStoreButton() {
-    final shortId = _shortId(_selectedStoreId ?? '');
-    return InkWell(
-      onTap: () async {
-        setState(() => _isStoreSelectorOpen = true);
-        final selected = await showModalBottomSheet<Map<String, dynamic>>(
-          context: context,
-          isScrollControlled: true,
-          backgroundColor: Colors.transparent,
-          builder: (ctx) => DraggableScrollableSheet(
-            expand: false,
-            initialChildSize: 0.45,
-            minChildSize: 0.25,
-            maxChildSize: 0.9,
-            builder: (context, scrollController) {
-              return Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: AppTheme.darkerPanel,
-                  borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-                  border: Border.all(color: AppTheme.primaryTeal.withValues(alpha: 0.18)),
-                ),
-                child: Column(
+  /// Abre o modal de seleção de loja (reutilizável por desktop e mobile).
+  Future<void> _openStoreSelector() async {
+    setState(() => _isStoreSelectorOpen = true);
+    final selected = await showModalBottomSheet<Map<String, dynamic>>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) => DraggableScrollableSheet(
+        expand: false,
+        initialChildSize: 0.45,
+        minChildSize: 0.25,
+        maxChildSize: 0.9,
+        builder: (sheetCtx, scrollController) {
+          return Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: AppTheme.darkerPanel,
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+              border: Border.all(color: AppTheme.primaryTeal.withValues(alpha: 0.18)),
+            ),
+            child: Column(
+              children: [
+                Row(
                   children: [
-                    Row(
-                      children: [
-                        const Icon(Icons.storefront, color: AppTheme.primaryTeal),
-                        const SizedBox(width: 8),
-                        Expanded(child: Text('Selecionar Loja', style: const TextStyle(color: AppTheme.textWhite, fontWeight: FontWeight.bold))),
-                        IconButton(onPressed: () => Navigator.of(context).pop(), icon: const Icon(Icons.close, color: AppTheme.textGray)),
-                      ],
+                    const Icon(Icons.storefront, color: AppTheme.primaryTeal),
+                    const SizedBox(width: 8),
+                    const Expanded(
+                      child: Text(
+                        'Selecionar Loja',
+                        style: TextStyle(color: AppTheme.textWhite, fontWeight: FontWeight.bold),
+                      ),
                     ),
-                    const Divider(color: AppTheme.accentGray),
-                    Expanded(
-                      child: _stores.isEmpty
-                          ? const Center(child: Text('Nenhuma loja cadastrada', style: TextStyle(color: AppTheme.textGray)))
-                          : ListView.separated(
-                              controller: scrollController,
-                              itemCount: _stores.length,
-                              separatorBuilder: (_, __) => const Divider(color: AppTheme.accentGray, height: 1),
-                              itemBuilder: (context, i) {
-                                final s = _stores[i];
-                                final id = '${s['id'] ?? ''}';
-                                final name = '${s['nome_loja'] ?? id}';
-                                final isSel = id == _selectedStoreId;
-                                return ListTile(
-                                  leading: Icon(Icons.storefront, color: isSel ? AppTheme.primaryTeal : AppTheme.textWhite),
-                                  title: Text(name, style: TextStyle(color: isSel ? AppTheme.primaryTeal : AppTheme.textWhite)),
-                                  subtitle: Text(_shortId(id), style: const TextStyle(color: AppTheme.textGray, fontFamily: 'monospace')),
-                                  trailing: isSel ? const Icon(Icons.check, color: AppTheme.primaryTeal) : null,
-                                  onTap: () => Navigator.of(context).pop(s),
-                                );
-                              },
-                            ),
+                    IconButton(
+                      onPressed: () => Navigator.of(sheetCtx).pop(),
+                      icon: const Icon(Icons.close, color: AppTheme.textGray),
                     ),
                   ],
                 ),
-              );
-            },
-          ),
-        );
+                const Divider(color: AppTheme.accentGray),
+                Expanded(
+                  child: _stores.isEmpty
+                      ? const Center(
+                          child: Text('Nenhuma loja cadastrada',
+                              style: TextStyle(color: AppTheme.textGray)))
+                      : ListView.separated(
+                          controller: scrollController,
+                          itemCount: _stores.length,
+                          separatorBuilder: (_, __) =>
+                              const Divider(color: AppTheme.accentGray, height: 1),
+                          itemBuilder: (listCtx, i) {
+                            final s = _stores[i];
+                            final id = '${s['id'] ?? ''}';
+                            final name = '${s['nome_loja'] ?? id}';
+                            final isSel = id == _selectedStoreId;
+                            return ListTile(
+                              leading: Icon(Icons.storefront,
+                                  color: isSel ? AppTheme.primaryTeal : AppTheme.textWhite),
+                              title: Text(name,
+                                  style: TextStyle(
+                                      color: isSel ? AppTheme.primaryTeal : AppTheme.textWhite)),
+                              subtitle: Text(_shortId(id),
+                                  style: const TextStyle(
+                                      color: AppTheme.textGray, fontFamily: 'monospace')),
+                              trailing:
+                                  isSel ? const Icon(Icons.check, color: AppTheme.primaryTeal) : null,
+                              onTap: () => Navigator.of(listCtx).pop(s),
+                            );
+                          },
+                        ),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
 
-        setState(() => _isStoreSelectorOpen = false);
-        if (selected != null) {
-          setState(() {
-            _selectedStoreId = '${selected['id'] ?? ''}';
-            _selectedStoreName = '${selected['nome_loja'] ?? _selectedStoreId}';
-          });
-        }
-      },
+    setState(() => _isStoreSelectorOpen = false);
+    if (selected != null) {
+      setState(() {
+        _selectedStoreId = '${selected['id'] ?? ''}';
+        _selectedStoreName = '${selected['nome_loja'] ?? _selectedStoreId}';
+      });
+    }
+  }
+
+  Widget _buildSelectedStoreButton() {
+    final shortId = _shortId(_selectedStoreId ?? '');
+    return InkWell(
+      onTap: _openStoreSelector,
       child: AnimatedScale(
         duration: const Duration(milliseconds: 160),
         scale: _isStoreButtonPressed ? 0.985 : 1.0,

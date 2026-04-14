@@ -3,6 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:nexus_engine/theme/app_theme.dart';
 import 'package:nexus_engine/screens/splash_screen.dart';
+import 'package:nexus_engine/screens/billing_screen.dart';
 
 /// Flag global para indicar se o Supabase está disponível
 bool supabaseAvailable = false;
@@ -42,8 +43,22 @@ class NexusEngineApp extends StatelessWidget {
       theme: AppTheme.darkTheme,
       debugShowCheckedModeBanner: false,
       home: const SplashScreen(),
+      routes: {
+        '/billing': (context) => const BillingScreen(),
+      },
     );
   }
 }
 
-//flutter run -d chrome  
+//flutter build web --release --dart-define=SUPABASE_URL=https://your-supabase-url.supabase.co --dart-define=SUPABASE_ANON_KEY=your-anon-key
+//flutter run -d chrome
+
+
+// 1. Adiciona todas as alterações ao index
+//git add .
+
+// 2. Cria o commit com uma mensagem descrevendo o que mudou
+//git commit -m "sua mensagem aqui"
+
+// 3. Envia para o repositório remoto (GitHub/Vercel)
+//git push

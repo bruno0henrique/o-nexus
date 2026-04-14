@@ -101,115 +101,293 @@ class _ContractsViewState extends State<ContractsView> {
 
   // ─── Master View ──────────────────────────────────────────────────────────
   Widget _buildMasterView() {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(28, 24, 28, 32),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildHeader(),
-          const SizedBox(height: 24),
-          _buildStatCards(),
-          const SizedBox(height: 24),
-          _buildTable(),
-        ],
-      ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isMobile = constraints.maxWidth < 600;
+        return SingleChildScrollView(
+          padding: EdgeInsets.fromLTRB(isMobile ? 10 : 28, isMobile ? 12 : 24, isMobile ? 10 : 28, isMobile ? 16 : 32),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildHeader(isMobile: isMobile),
+              SizedBox(height: isMobile ? 14 : 24),
+              _buildStatCards(isMobile: isMobile),
+              SizedBox(height: isMobile ? 14 : 24),
+              Divider(
+                color: AppTheme.accentGray.withValues(alpha: 0.35),
+                thickness: 1,
+                height: isMobile ? 18 : 28,
+              ),
+              SizedBox(height: isMobile ? 10 : 18),
+              isMobile ? _buildListViewMobile() : _buildTable(),
+            ],
+          ),
+        );
+      },
     );
   }
 
-  Widget _buildHeader() {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
-              Text(
-                'Registro de Contratos',
-                style: TextStyle(
-                  color: AppTheme.textWhite,
-                  fontSize: 26,
-                  fontWeight: FontWeight.bold,
+  Widget _buildHeader({bool isMobile = false}) {
+    if (!isMobile) {
+      return Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: const [
+                Text(
+                  'Registro de Contratos',
+                  style: TextStyle(
+                    color: AppTheme.textWhite,
+                    fontSize: 26,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-              SizedBox(height: 4),
-              Text(
-                'Gerencie e monitore a infraestrutura legal de varejo de alto valor.',
-                style: TextStyle(color: AppTheme.textGray, fontSize: 12),
-              ),
+                SizedBox(height: 4),
+                Text(
+                  'Gerencie e monitore a infraestrutura legal de varejo de alto valor.',
+                  style: TextStyle(color: AppTheme.textGray, fontSize: 12),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 16),
+          Row(
+            children: [
+              _headerBtn(Icons.file_download_outlined, 'Exportar', false),
+              const SizedBox(width: 8),
+              _headerBtn(Icons.upload_file, 'Upload PDF', false),
+              const SizedBox(width: 8),
+              _headerBtn(Icons.add, 'Novo Contrato', true),
             ],
           ),
+        ],
+      );
+    } else {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Registro de Contratos',
+            style: TextStyle(
+              color: AppTheme.textWhite,
+              fontSize: 19,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 4),
+          const Text(
+            'Gerencie e monitore a infraestrutura legal de varejo de alto valor.',
+            style: TextStyle(color: AppTheme.textGray, fontSize: 11),
+          ),
+          const SizedBox(height: 10),
+          Row(
+            children: [
+              Expanded(child: _headerBtn(Icons.file_download_outlined, '', false)),
+              const SizedBox(width: 6),
+              Expanded(child: _headerBtn(Icons.upload_file, '', false)),
+              const SizedBox(width: 6),
+              Expanded(child: _headerBtn(Icons.add, '', true)),
+            ],
+          ),
+        ],
+      );
+    }
+  }
+
+  Widget _headerBtn(IconData icon, String label, bool primary) {
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: primary ? AppTheme.primaryTeal : AppTheme.darkPanel,
+        foregroundColor: primary ? AppTheme.background : AppTheme.textWhite,
+        side: primary ? null : const BorderSide(color: AppTheme.accentGray),
+        padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+        textStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+        elevation: 0,
+      ),
+      onPressed: () {},
+      child: label.isEmpty
+          ? Icon(icon, size: 18)
+          : Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(icon, size: 15),
+                const SizedBox(width: 6),
+                Text(label),
+              ],
+            ),
+    );
+  }
+
+  Widget _buildStatCards({bool isMobile = false}) {
+    final cards = [
+      _statCard(
+        badge: 'ATIVO',
+        badgeColor: AppTheme.primaryTeal,
+        icon: Icons.verified_outlined,
+        value: '1.248',
+        sub: 'Total de Contratos Ativos',
+        note: '+12% em relação ao trimestre anterior',
+        noteColor: AppTheme.primaryTeal,
+      ),
+      _statCard(
+        badge: 'PIPELINE',
+        badgeColor: AppTheme.warningOrange,
+        icon: Icons.autorenew,
+        value: '42',
+        sub: 'Renovações Pendentes',
+        note: 'Próxima revisão: Ago 24',
+        noteColor: AppTheme.textGray,
+      ),
+      _statCard(
+        badge: 'AÇÃO NECESSÁRIA',
+        badgeColor: AppTheme.criticalRed,
+        icon: Icons.event_busy_outlined,
+        value: '08',
+        sub: 'Vencendo em Breve',
+        note: '⚠ Atenção crítica necessária',
+        noteColor: AppTheme.criticalRed,
+      ),
+    ];
+    if (!isMobile) {
+      return Row(
+        children: [
+          for (int i = 0; i < cards.length; i++) ...[
+            Expanded(child: cards[i]),
+            if (i < cards.length - 1) const SizedBox(width: 12),
+          ],
+        ],
+      );
+    } else {
+      return Column(
+        children: [
+          for (int i = 0; i < cards.length; i++) ...[
+            cards[i],
+            if (i < cards.length - 1) const SizedBox(height: 10),
+          ],
+        ],
+      );
+    }
+  }
+  // Mobile: lista vertical simplificada
+  Widget _buildListViewMobile() {
+    if (_contracts.isEmpty) {
+      return const Padding(
+        padding: EdgeInsets.symmetric(vertical: 18),
+        child: Center(
+          child: Text('Nenhum contrato encontrado.', style: TextStyle(color: AppTheme.textGray, fontSize: 13)),
         ),
-        const SizedBox(width: 16),
+      );
+    }
+    return Column(
+      children: [
+        for (final c in _contracts) _contractCardMobile(c),
+        const SizedBox(height: 10),
         Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            _headerBtn(Icons.file_download_outlined, 'Exportar', false),
-            const SizedBox(width: 8),
-            _headerBtn(Icons.upload_file, 'Upload PDF', false),
-            const SizedBox(width: 8),
-            _headerBtn(Icons.add, 'Novo Contrato', true),
+            _pageBtn('< Anterior'),
+            _pageBtn('Próximo >'),
           ],
         ),
       ],
     );
   }
 
-  Widget _headerBtn(IconData icon, String label, bool primary) {
-    return ElevatedButton.icon(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: primary ? AppTheme.primaryTeal : AppTheme.darkPanel,
-        foregroundColor: primary ? AppTheme.background : AppTheme.textWhite,
-        side: primary ? null : const BorderSide(color: AppTheme.accentGray),
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
-        textStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
-        elevation: 0,
+  Widget _contractCardMobile(Map<String, dynamic> c) {
+    final statusColor = c['statusColor'] as Color;
+    final isPrimary = c['typeIsPrimary'] as bool;
+    final typeColor = isPrimary ? AppTheme.primaryTeal : AppTheme.textGray;
+    return Container(
+      margin: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: AppTheme.darkPanel,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: AppTheme.accentGray.withValues(alpha: 0.18)),
       ),
-      icon: Icon(icon, size: 15),
-      label: Text(label),
-      onPressed: () {},
-    );
-  }
-
-  Widget _buildStatCards() {
-    return Row(
-      children: [
-        Expanded(
-          child: _statCard(
-            badge: 'ATIVO',
-            badgeColor: AppTheme.primaryTeal,
-            icon: Icons.verified_outlined,
-            value: '1.248',
-            sub: 'Total de Contratos Ativos',
-            note: '+12% em relação ao trimestre anterior',
-            noteColor: AppTheme.primaryTeal,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                width: 28,
+                height: 28,
+                decoration: BoxDecoration(
+                  color: AppTheme.accentGray,
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                alignment: Alignment.center,
+                child: Text(
+                  c['initials'] as String,
+                  style: const TextStyle(
+                    color: AppTheme.textWhite,
+                    fontSize: 10,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  c['name'] as String,
+                  style: const TextStyle(
+                    color: AppTheme.textWhite,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              IconButton(
+                icon: const Icon(Icons.visibility_outlined, color: AppTheme.primaryTeal, size: 20),
+                onPressed: () => setState(() => _selected = c),
+                tooltip: 'Visualizar Contrato',
+              ),
+            ],
           ),
-        ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: _statCard(
-            badge: 'PIPELINE',
-            badgeColor: AppTheme.warningOrange,
-            icon: Icons.autorenew,
-            value: '42',
-            sub: 'Renovações Pendentes',
-            note: 'Próxima revisão: Ago 24',
-            noteColor: AppTheme.textGray,
+          const SizedBox(height: 8),
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
+                decoration: BoxDecoration(
+                  color: typeColor.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(3),
+                  border: Border.all(color: typeColor.withValues(alpha: 0.3)),
+                ),
+                child: Text(
+                  c['type'] as String,
+                  style: TextStyle(color: typeColor, fontSize: 10, fontWeight: FontWeight.bold),
+                ),
+              ),
+              const SizedBox(width: 10),
+              Container(
+                width: 7,
+                height: 7,
+                decoration: BoxDecoration(shape: BoxShape.circle, color: statusColor),
+              ),
+              const SizedBox(width: 4),
+              Text(c['status'] as String, style: TextStyle(color: statusColor, fontSize: 11)),
+            ],
           ),
-        ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: _statCard(
-            badge: 'AÇÃO NECESSÁRIA',
-            badgeColor: AppTheme.criticalRed,
-            icon: Icons.event_busy_outlined,
-            value: '08',
-            sub: 'Vencendo em Breve',
-            note: '⚠ Atenção crítica necessária',
-            noteColor: AppTheme.criticalRed,
+          const SizedBox(height: 6),
+          Row(
+            children: [
+              const Icon(Icons.calendar_today, size: 12, color: AppTheme.textGray),
+              const SizedBox(width: 4),
+              Text('Ativação: ${c['activation']}', style: const TextStyle(color: AppTheme.textGray, fontSize: 10)),
+              const SizedBox(width: 12),
+              const Icon(Icons.event, size: 12, color: AppTheme.textGray),
+              const SizedBox(width: 4),
+              Text('Venc: ${c['maturity']}', style: const TextStyle(color: AppTheme.textGray, fontSize: 10)),
+            ],
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 

@@ -498,30 +498,50 @@ class _StoreDetailScreenState extends State<StoreDetailScreen> {
 
   // ── Stats ──────────────────────────────────────────────────────────────────
   Widget _buildStatsRow() {
-    return Row(
-      children: [
+    return LayoutBuilder(builder: (context, constraints) {
+      final narrow = constraints.maxWidth < 520;
+
+      final cards = [
         _statCard(
           'Total de SKUs',
           _loadingStats ? '...' : '$_totalSkus',
           Icons.inventory_2_outlined,
           AppTheme.primaryTeal,
         ),
-        const SizedBox(width: 12),
         _statCard(
           'Estoque Total',
           _loadingStats ? '...' : '${_estoqueTotal.toStringAsFixed(0)} un',
           Icons.warehouse_outlined,
           AppTheme.primaryTeal,
         ),
-        const SizedBox(width: 12),
         _statCard(
           'Valor em Estoque',
           _loadingStats ? '...' : 'R\$ ${_fmtVal(_valorTotal)}',
           Icons.attach_money,
           AppTheme.warningOrange,
         ),
-      ],
-    );
+      ];
+
+      if (!narrow) {
+        return Row(
+          children: [
+            for (int i = 0; i < cards.length; i++) ...[
+              Expanded(child: cards[i]),
+              if (i < cards.length - 1) const SizedBox(width: 12),
+            ],
+          ],
+        );
+      }
+
+      return Column(
+        children: [
+          for (int i = 0; i < cards.length; i++) ...[
+            cards[i],
+            if (i < cards.length - 1) const SizedBox(height: 12),
+          ],
+        ],
+      );
+    });
   }
 
   String _fmtVal(double v) {
@@ -530,45 +550,42 @@ class _StoreDetailScreenState extends State<StoreDetailScreen> {
     return v.toStringAsFixed(2);
   }
 
-  Widget _statCard(
-      String label, String value, IconData icon, Color accent) {
-    return Expanded(
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: AppTheme.darkPanel,
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: AppTheme.accentGray),
-        ),
-        child: Row(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: accent.withValues(alpha: 0.12),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Icon(icon, color: accent, size: 20),
+  Widget _statCard(String label, String value, IconData icon, Color accent) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: AppTheme.darkPanel,
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: AppTheme.accentGray),
+      ),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: accent.withValues(alpha: 0.12),
+              borderRadius: BorderRadius.circular(8),
             ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(label,
-                      style: const TextStyle(
-                          color: AppTheme.textGray, fontSize: 11)),
-                  const SizedBox(height: 2),
-                  Text(value,
-                      style: const TextStyle(
-                          color: AppTheme.textWhite,
-                          fontSize: 17,
-                          fontWeight: FontWeight.bold)),
-                ],
-              ),
+            child: Icon(icon, color: accent, size: 20),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(label,
+                    style: const TextStyle(
+                        color: AppTheme.textGray, fontSize: 11)),
+                const SizedBox(height: 2),
+                Text(value,
+                    style: const TextStyle(
+                        color: AppTheme.textWhite,
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold)),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -599,7 +616,7 @@ class _StoreDetailScreenState extends State<StoreDetailScreen> {
             _formField('CNPJ', _cnpjCtrl),
             const SizedBox(height: 12),
 
-            // Campos dinâmicos adicionais
+            // Campos dinâmicos adicionais  
             if (_otherCtrls.isNotEmpty) ...[
               const SizedBox(height: 8),
               const Text('Outras informações', style: TextStyle(color: AppTheme.textGray, fontSize: 11)),
@@ -617,9 +634,9 @@ class _StoreDetailScreenState extends State<StoreDetailScreen> {
             ],
 
             const SizedBox(height: 20),
-            Align(
-              alignment: Alignment.centerRight,
-              child: ElevatedButton.icon(
+            LayoutBuilder(builder: (context, constraints) {
+              final narrow = constraints.maxWidth < 420;
+              final button = ElevatedButton.icon(
                 onPressed: _isSaving ? null : _saveStore,
                 icon: _isSaving
                     ? const SizedBox(
@@ -630,8 +647,11 @@ class _StoreDetailScreenState extends State<StoreDetailScreen> {
                       )
                     : const Icon(Icons.save_alt, size: 16),
                 label: const Text('Salvar Alterações'),
-              ),
-            ),
+              );
+              return narrow
+                  ? SizedBox(width: double.infinity, child: button)
+                  : Align(alignment: Alignment.centerRight, child: button);
+            }),
           ],
         ),
       ),
