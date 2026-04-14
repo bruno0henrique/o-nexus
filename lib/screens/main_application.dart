@@ -11,6 +11,9 @@ import 'package:nexus_engine/screens/billing_screen.dart';
 import 'package:nexus_engine/theme/app_theme.dart';
 import 'package:flutter/services.dart';
 import 'package:nexus_engine/services/admin_service.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:nexus_engine/main.dart' show supabaseAvailable;
+import 'package:nexus_engine/screens/login_screen.dart';
 
 class MainApplication extends StatefulWidget {
   const MainApplication({super.key});
@@ -26,10 +29,15 @@ class _MainApplicationState extends State<MainApplication> {
   // Stores (populated from Supabase)
   final AdminService _adminService = AdminService();
   List<Map<String, dynamic>> _stores = [];
+  List<Map<String, dynamic>> _userStores = [];
   String? _selectedStoreId;
   String? _selectedStoreName;
+  String? _selectedUserStoreId;
+  String? _selectedUserStoreName;
   bool _isStoreSelectorOpen = false;
-  bool _isStoreButtonPressed = false;
+  bool _isUserStoreSelectorOpen = false;
+  final bool _isStoreButtonPressed = false;
+  String? _loggedClientCnpj;
 
   // Última loja cadastrada — exibida na topbar para copiar o ID
   String? _lastCreatedStoreId;
@@ -64,15 +72,49 @@ class _MainApplicationState extends State<MainApplication> {
       }
       setState(() {
         _stores = safeCopy;
+        _loggedClientCnpj = _resolveLoggedClientCnpj();
+        _userStores = _filterStoresByCnpj(_stores, _loggedClientCnpj);
         if ((_selectedStoreId == null || _selectedStoreId!.isEmpty) && _stores.isNotEmpty) {
           _selectedStoreId = '${_stores.first['id'] ?? ''}';
           _selectedStoreName = '${_stores.first['nome_loja'] ?? _selectedStoreId}';
+        }
+        if ((_selectedUserStoreId == null || _selectedUserStoreId!.isEmpty) && _userStores.isNotEmpty) {
+          _selectedUserStoreId = '${_userStores.first['id'] ?? ''}';
+          _selectedUserStoreName = '${_userStores.first['nome_loja'] ?? _selectedUserStoreId}';
         }
       });
     } catch (e, st) {
       // ignore: avoid_print
       print('Erro ao carregar lojas: $e\n$st');
     }
+  }
+
+  String? _resolveLoggedClientCnpj() {
+    if (!supabaseAvailable) return null;
+    final user = Supabase.instance.client.auth.currentUser;
+    if (user == null) return null;
+    final candidates = <dynamic>[
+      user.userMetadata?['cnpj'],
+      user.userMetadata?['cnpj_cliente'],
+      user.userMetadata?['client_cnpj'],
+      user.appMetadata['cnpj'],
+      user.appMetadata['cnpj_cliente'],
+      user.appMetadata['client_cnpj'],
+    ];
+    for (final item in candidates) {
+      final value = (item ?? '').toString().trim();
+      if (value.isNotEmpty) return value;
+    }
+    return null;
+  }
+
+  List<Map<String, dynamic>> _filterStoresByCnpj(List<Map<String, dynamic>> stores, String? cnpj) {
+    if (cnpj == null || cnpj.isEmpty) return <Map<String, dynamic>>[];
+    final target = cnpj.replaceAll(RegExp(r'\D'), '');
+    return stores.where((s) {
+      final storeCnpj = '${s['cnpj'] ?? ''}'.replaceAll(RegExp(r'\D'), '');
+      return storeCnpj.isNotEmpty && storeCnpj == target;
+    }).toList();
   }
 
   Widget _buildAppTitle() {
@@ -273,7 +315,14 @@ class _MainApplicationState extends State<MainApplication> {
           appBar: isMobile
               ? AppBar(
                   title: _buildAppTitle(),
-                  actions: [_buildModeToggle()],
+                  actions: [
+                    _buildModeToggle(),
+                    IconButton(
+                      icon: const Icon(Icons.logout, color: AppTheme.textGray),
+                      tooltip: 'Sair',
+                      onPressed: _handleLogout,
+                    ),
+                  ],
                 )
               : null,
           drawer: isMobile ? Drawer(child: _buildSidebar()) : null,
@@ -403,15 +452,18 @@ class _MainApplicationState extends State<MainApplication> {
     } else {
       switch (_selectedIndex) {
         case 0:
-          return const UserModeView();
+          return UserModeView(
+            storeId: _selectedUserStoreId,
+            storeName: _selectedUserStoreName,
+          );
         case 1:
-          return const InventoryView();
+          return InventoryView(storeId: _selectedUserStoreId);
         case 2:
-          return const StatisticsView();
+          return StatisticsView(storeId: _selectedUserStoreId, showStoreSelector: false);
         case 3:
           return const LogisticsView();
         case 4:
-          return const StatisticsView();
+          return StatisticsView(storeId: _selectedUserStoreId, showStoreSelector: false);
         default:
           return const Center(child: Text('Tela em construção', style: TextStyle(color: AppTheme.textWhite)));
       }
@@ -504,14 +556,21 @@ class _MainApplicationState extends State<MainApplication> {
                   ),
                 ),
               if (_lastCreatedStoreId != null) const SizedBox(width: 8),
-              // Loja selecionada (botão estilizado) — visível apenas em Admin Mode
+              // Loja selecionada (botão estilizado)
               if (isAdminMode && _selectedStoreName != null) _buildSelectedStoreButton(),
+              if (!isAdminMode && _selectedUserStoreName != null) _buildUserSelectedStoreButton(),
               const SizedBox(width: 16),
               _buildModeToggle(),
               const SizedBox(width: 16),
               const Icon(Icons.notifications_none, color: AppTheme.textGray),
               const SizedBox(width: 12),
               const Icon(Icons.settings, color: AppTheme.textGray),
+              const SizedBox(width: 12),
+              IconButton(
+                icon: const Icon(Icons.logout, color: AppTheme.textGray),
+                tooltip: 'Sair',
+                onPressed: _handleLogout,
+              ),
               const SizedBox(width: 12),
               Container(
                 width: 32,
@@ -594,6 +653,17 @@ class _MainApplicationState extends State<MainApplication> {
     );
   }
 
+  Future<void> _handleLogout() async {
+    if (supabaseAvailable) {
+      await Supabase.instance.client.auth.signOut();
+    }
+    if (!mounted) return;
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (_) => const LoginScreen()),
+      (route) => false,
+    );
+  }
+
   String _shortId(String id) {
     if (id.isEmpty) return '';
     if (id.length <= 14) return id;
@@ -647,7 +717,7 @@ class _MainApplicationState extends State<MainApplication> {
                       : ListView.separated(
                           controller: scrollController,
                           itemCount: _stores.length,
-                          separatorBuilder: (_, __) =>
+                          separatorBuilder: (_, index) =>
                               const Divider(color: AppTheme.accentGray, height: 1),
                           itemBuilder: (listCtx, i) {
                             final s = _stores[i];
@@ -682,6 +752,91 @@ class _MainApplicationState extends State<MainApplication> {
       setState(() {
         _selectedStoreId = '${selected['id'] ?? ''}';
         _selectedStoreName = '${selected['nome_loja'] ?? _selectedStoreId}';
+      });
+    }
+  }
+
+  Future<void> _openUserStoreSelector() async {
+    setState(() => _isUserStoreSelectorOpen = true);
+    final selected = await showModalBottomSheet<Map<String, dynamic>>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) => DraggableScrollableSheet(
+        expand: false,
+        initialChildSize: 0.45,
+        minChildSize: 0.25,
+        maxChildSize: 0.9,
+        builder: (sheetCtx, scrollController) {
+          return Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: AppTheme.darkerPanel,
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+              border: Border.all(color: AppTheme.primaryTeal.withValues(alpha: 0.18)),
+            ),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    const Icon(Icons.storefront, color: AppTheme.primaryTeal),
+                    const SizedBox(width: 8),
+                    const Expanded(
+                      child: Text(
+                        'Selecionar Loja',
+                        style: TextStyle(color: AppTheme.textWhite, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () => Navigator.of(sheetCtx).pop(),
+                      icon: const Icon(Icons.close, color: AppTheme.textGray),
+                    ),
+                  ],
+                ),
+                const Divider(color: AppTheme.accentGray),
+                Expanded(
+                  child: _userStores.isEmpty
+                      ? const Center(
+                          child: Text('Nenhuma loja liberada para este CNPJ',
+                              style: TextStyle(color: AppTheme.textGray)))
+                      : ListView.separated(
+                          controller: scrollController,
+                          itemCount: _userStores.length,
+                          separatorBuilder: (_, index) =>
+                              const Divider(color: AppTheme.accentGray, height: 1),
+                          itemBuilder: (listCtx, i) {
+                            final s = _userStores[i];
+                            final id = '${s['id'] ?? ''}';
+                            final name = '${s['nome_loja'] ?? id}';
+                            final isSel = id == _selectedUserStoreId;
+                            return ListTile(
+                              leading: Icon(Icons.storefront,
+                                  color: isSel ? AppTheme.primaryTeal : AppTheme.textWhite),
+                              title: Text(name,
+                                  style: TextStyle(
+                                      color: isSel ? AppTheme.primaryTeal : AppTheme.textWhite)),
+                              subtitle: Text(_shortId(id),
+                                  style: const TextStyle(
+                                      color: AppTheme.textGray, fontFamily: 'monospace')),
+                              trailing:
+                                  isSel ? const Icon(Icons.check, color: AppTheme.primaryTeal) : null,
+                              onTap: () => Navigator.of(listCtx).pop(s),
+                            );
+                          },
+                        ),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+
+    setState(() => _isUserStoreSelectorOpen = false);
+    if (selected != null) {
+      setState(() {
+        _selectedUserStoreId = '${selected['id'] ?? ''}';
+        _selectedUserStoreName = '${selected['nome_loja'] ?? _selectedUserStoreId}';
       });
     }
   }
@@ -725,6 +880,42 @@ class _MainApplicationState extends State<MainApplication> {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildUserSelectedStoreButton() {
+    final shortId = _shortId(_selectedUserStoreId ?? '');
+    return InkWell(
+      onTap: _openUserStoreSelector,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        decoration: BoxDecoration(
+          color: AppTheme.darkPanel,
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(color: AppTheme.primaryTeal.withValues(alpha: 0.28)),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.storefront, color: AppTheme.primaryTeal, size: 16),
+            const SizedBox(width: 10),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(_selectedUserStoreName ?? '', style: const TextStyle(color: AppTheme.textWhite, fontSize: 12, fontWeight: FontWeight.w700)),
+                if (shortId.isNotEmpty) Text(shortId, style: const TextStyle(color: AppTheme.primaryTeal, fontSize: 11, fontFamily: 'monospace'))
+              ],
+            ),
+            const SizedBox(width: 10),
+            AnimatedRotation(
+              turns: _isUserStoreSelectorOpen ? 0.5 : 0.0,
+              duration: const Duration(milliseconds: 280),
+              child: const Icon(Icons.swap_horiz, color: AppTheme.primaryTeal),
+            ),
+          ],
         ),
       ),
     );

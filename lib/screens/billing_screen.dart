@@ -104,10 +104,8 @@ class _BillingScreenState extends State<BillingScreen> {
     return LayoutBuilder(
       builder: (context, constraints) {
         final isMobile = constraints.maxWidth < 700;
-        final carregando = _carregando ?? false;
+        final carregando = _carregando;
         final erro = _erro;
-        final lista = _lista ?? const [];
-        final lojas = _lojas ?? const [];
         return Scaffold(
           backgroundColor: AppTheme.background,
           appBar: isMobile
@@ -547,7 +545,7 @@ class _BillingScreenState extends State<BillingScreen> {
                 radius: 15,
                 backgroundColor: AppTheme.accentGray,
                 child: Text(
-                  (e.nomeCliente.isNotEmpty ? e.nomeCliente[0].toUpperCase() : '?') ?? '?',
+                  e.nomeCliente.isNotEmpty ? e.nomeCliente[0].toUpperCase() : '?',
                   style: const TextStyle(color: AppTheme.textWhite, fontWeight: FontWeight.bold, fontSize: 13),
                 ),
               ),
@@ -556,8 +554,8 @@ class _BillingScreenState extends State<BillingScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(e.nomeCliente ?? '', style: const TextStyle(color: AppTheme.textWhite, fontWeight: FontWeight.w600, fontSize: 13), overflow: TextOverflow.ellipsis),
-                    Text(e.nomeLoja ?? '', style: const TextStyle(color: AppTheme.textGray, fontSize: 11), overflow: TextOverflow.ellipsis),
+                    Text(e.nomeCliente, style: const TextStyle(color: AppTheme.textWhite, fontWeight: FontWeight.w600, fontSize: 13), overflow: TextOverflow.ellipsis),
+                    Text(e.nomeLoja, style: const TextStyle(color: AppTheme.textGray, fontSize: 11), overflow: TextOverflow.ellipsis),
                   ],
                 ),
               ),
@@ -574,16 +572,16 @@ class _BillingScreenState extends State<BillingScreen> {
             spacing: 10,
             runSpacing: 6,
             children: [
-              _infoChip(Icons.calendar_today, 'Dia ${(e.diaVencimento ?? '')}'),
-              _infoChip(Icons.payments, _moeda(e.valorTotal ?? 0)),
-              _infoChip(Icons.repeat, '${e.parcelas ?? 1}x'),
+              _infoChip(Icons.calendar_today, 'Dia ${e.diaVencimento}'),
+              _infoChip(Icons.payments, _moeda(e.valorTotal)),
+              _infoChip(Icons.repeat, '${e.parcelas}x'),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                 decoration: BoxDecoration(
                   color: cor.withValues(alpha: 0.12),
                   borderRadius: BorderRadius.circular(4),
                 ),
-                child: Text(_statusLabel(e.status ?? 'pendente'), style: TextStyle(color: cor, fontWeight: FontWeight.bold, fontSize: 11)),
+                child: Text(_statusLabel(e.status), style: TextStyle(color: cor, fontWeight: FontWeight.bold, fontSize: 11)),
               ),
             ],
           ),
@@ -807,7 +805,7 @@ class _BillingScreenState extends State<BillingScreen> {
                   children: [
                     // Loja
                     DropdownButtonFormField<String>(
-                      value: lojaId,
+                      initialValue: lojaId,
                       dropdownColor: AppTheme.darkPanel,
                       style: const TextStyle(color: AppTheme.textWhite, fontSize: 13),
                       decoration: _inputDecoration('Loja'),
@@ -872,7 +870,7 @@ class _BillingScreenState extends State<BillingScreen> {
                     const SizedBox(height: 12),
                     // Status
                     DropdownButtonFormField<String>(
-                      value: statusNovo,
+                      initialValue: statusNovo,
                       dropdownColor: AppTheme.darkPanel,
                       style: const TextStyle(color: AppTheme.textWhite, fontSize: 13),
                       decoration: _inputDecoration('Status'),
@@ -914,7 +912,7 @@ class _BillingScreenState extends State<BillingScreen> {
                       } catch (err) {
                         setLocal(() => salvando = false);
                         if (ctx.mounted) {
-                          ScaffoldMessenger.of(context).showSnackBar(
+                          ScaffoldMessenger.of(ctx).showSnackBar(
                             SnackBar(content: Text('Erro: $err'), backgroundColor: AppTheme.criticalRed),
                           );
                         }

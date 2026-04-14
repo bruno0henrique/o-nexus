@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 /// Displays a friendly fallback message when native web iframe is not available.
 class NativePdfIframe extends StatelessWidget {
   final String url;
-  const NativePdfIframe({Key? key, required this.url}) : super(key: key);
+  const NativePdfIframe({super.key, required this.url});
 
   @override
   Widget build(BuildContext context) {

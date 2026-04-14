@@ -75,11 +75,9 @@ class FaturamentoService {
       .select('*, lojas(nome)')
       .order('criado_em', ascending: false)
       .range(page * pageSize, (page + 1) * pageSize - 1);
-    if (response is List) {
-      return response.map((e) => FaturamentoEntry.fromMap(e as Map<String, dynamic>)).toList();
-    } else {
-      return [];
-    }
+    return List<Map<String, dynamic>>.from(response)
+        .map(FaturamentoEntry.fromMap)
+        .toList();
   }
 
   /// Calcula os totais agregados consultando toda a tabela de faturamento.
@@ -130,11 +128,7 @@ class FaturamentoService {
       .from('lojas')
       .select('id, nome')
       .order('nome', ascending: true);
-    if (response is List) {
-      return response.cast<Map<String, dynamic>>();
-    } else {
-      return [];
-    }
+    return List<Map<String, dynamic>>.from(response);
   }
 
   /// Insere um novo registro de faturamento.

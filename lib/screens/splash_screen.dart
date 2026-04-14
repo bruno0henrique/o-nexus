@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:nexus_engine/screens/login_screen.dart';
+import 'package:nexus_engine/screens/main_application.dart';
 import 'package:nexus_engine/theme/app_theme.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:nexus_engine/main.dart' show supabaseAvailable;
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -19,9 +22,12 @@ class _SplashScreenState extends State<SplashScreen> {
   void _navigateToLogin() async {
     await Future.delayed(const Duration(seconds: 2));
     if (!mounted) return;
+    final hasSession = supabaseAvailable &&
+        Supabase.instance.client.auth.currentSession != null;
     Navigator.of(context).pushReplacement(
       PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) => const LoginScreen(),
+        pageBuilder: (context, animation, secondaryAnimation) =>
+            hasSession ? const MainApplication() : const LoginScreen(),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return FadeTransition(opacity: animation, child: child);
         },

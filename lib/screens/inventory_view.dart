@@ -1,9 +1,14 @@
 ﻿import 'package:flutter/material.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:nexus_engine/theme/app_theme.dart';
 import 'package:nexus_engine/services/admin_service.dart';
+import 'package:nexus_engine/main.dart' show supabaseAvailable;
+import 'package:nexus_engine/utils/local_file_saver.dart';
 
 class InventoryView extends StatefulWidget {
-  const InventoryView({super.key});
+  final String? storeId;
+  const InventoryView({super.key, this.storeId});
 
   @override
   State<InventoryView> createState() => _InventoryViewState();
@@ -11,6 +16,7 @@ class InventoryView extends StatefulWidget {
 
 class _InventoryViewState extends State<InventoryView> {
   final AdminService _service = AdminService();
+  static const String _uploadBaseFolder = r'C:\Programas\O-Nexus\nexus_engine\envios_cliente';
 
   List<Map<String, dynamic>> _items = [];
   bool _isLoading = true;
@@ -35,6 +41,14 @@ class _InventoryViewState extends State<InventoryView> {
   }
 
   @override
+  void didUpdateWidget(covariant InventoryView oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.storeId != widget.storeId) {
+      _loadData();
+    }
+  }
+
+  @override
   void dispose() {
     _searchCtrl.dispose();
     super.dispose();
@@ -46,7 +60,7 @@ class _InventoryViewState extends State<InventoryView> {
       _error = null;
     });
     try {
-      final data = await _service.fetchAuditoria();
+      final data = await _service.fetchAuditoria(mercadinhoId: widget.storeId);
       int semEstq = 0;
       double valor = 0;
       final cats = <String>{};
@@ -109,7 +123,7 @@ class _InventoryViewState extends State<InventoryView> {
         return Scaffold(
           backgroundColor: AppTheme.background,
           floatingActionButton: FloatingActionButton.extended(
-            onPressed: () {},
+            onPressed: _openUploadBottomSheet,
             backgroundColor: AppTheme.primaryTeal,
             foregroundColor: AppTheme.background,
             icon: const Icon(Icons.add),
@@ -828,6 +842,382 @@ class _InventoryViewState extends State<InventoryView> {
   );
 
   // ── Helpers ───────────────────────────────────────────────────
+
+  Future<void> _openUploadBottomSheet() async {
+    final cnpjLogado = _resolveLoggedClientCnpj();
+    if (cnpjLogado == null) {
+      _showUploadSnack(
+        'Nao foi possivel identificar o CNPJ do cliente logado.',
+        isError: true,
+      );
+      return;
+    }
+
+    final lojas = await _fetchStoresByCnpj(cnpjLogado);
+    if (!mounted) return;
+    if (lojas.isEmpty) {
+      _showUploadSnack(
+        'Nenhuma loja encontrada para o CNPJ $cnpjLogado.',
+        isError: true,
+      );
+      return;
+    }
+
+    String? selectedStoreId = '${lojas.first['id'] ?? ''}';
+    String selectedStoreName = '${lojas.first['nome_loja'] ?? 'LOJA'}';
+    String selectedType = 'estoque';
+    PlatformFile? selectedFile;
+    bool isSaving = false;
+
+    await showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setSheetState) {
+          return Container(
+            margin: const EdgeInsets.only(top: 28),
+            padding: EdgeInsets.fromLTRB(
+              16,
+              12,
+              16,
+              16 + MediaQuery.of(ctx).viewInsets.bottom,
+            ),
+            decoration: BoxDecoration(
+              color: AppTheme.darkerPanel,
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(18)),
+              border: Border.all(color: AppTheme.primaryTeal.withValues(alpha: 0.25)),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Center(
+                  child: Container(
+                    width: 42,
+                    height: 4,
+                    decoration: BoxDecoration(
+                      color: AppTheme.accentGray,
+                      borderRadius: BorderRadius.circular(2),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 14),
+                const Text(
+                  'Enviar Arquivo de Inventario',
+                  style: TextStyle(
+                    color: AppTheme.textWhite,
+                    fontSize: 17,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  'CNPJ logado: $cnpjLogado',
+                  style: const TextStyle(color: AppTheme.textGray, fontSize: 12),
+                ),
+                const SizedBox(height: 14),
+                DropdownButtonFormField<String>(
+                  initialValue: selectedStoreId,
+                  style: const TextStyle(color: AppTheme.textWhite, fontSize: 13),
+                  decoration: _uploadInputDecoration(
+                    label: 'Loja de destino',
+                    icon: Icons.storefront,
+                  ),
+                  dropdownColor: AppTheme.darkPanel,
+                  items: lojas
+                      .map(
+                        (s) => DropdownMenuItem<String>(
+                          value: '${s['id']}',
+                          child: Text(
+                            '${s['nome_loja'] ?? s['id']}',
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      )
+                      .toList(),
+                  onChanged: isSaving
+                      ? null
+                      : (v) {
+                          if (v == null) return;
+                          final loja = lojas.firstWhere((s) => '${s['id']}' == v);
+                          setSheetState(() {
+                            selectedStoreId = v;
+                            selectedStoreName = '${loja['nome_loja'] ?? 'LOJA'}';
+                          });
+                        },
+                ),
+                const SizedBox(height: 12),
+                DropdownButtonFormField<String>(
+                  initialValue: selectedType,
+                  style: const TextStyle(color: AppTheme.textWhite, fontSize: 13),
+                  decoration: _uploadInputDecoration(
+                    label: 'Tipo de arquivo',
+                    icon: Icons.category_outlined,
+                  ),
+                  dropdownColor: AppTheme.darkPanel,
+                  items: const [
+                    DropdownMenuItem(value: 'estoque', child: Text('Estoque')),
+                    DropdownMenuItem(
+                      value: 'saida_caixa',
+                      child: Text('Saida de caixa'),
+                    ),
+                  ],
+                  onChanged: isSaving
+                      ? null
+                      : (v) {
+                          if (v == null) return;
+                          setSheetState(() => selectedType = v);
+                        },
+                ),
+                const SizedBox(height: 14),
+                InkWell(
+                  borderRadius: BorderRadius.circular(10),
+                  onTap: isSaving
+                      ? null
+                      : () async {
+                          final result = await FilePicker.platform.pickFiles(
+                            withData: true,
+                            type: FileType.custom,
+                            allowedExtensions: const [
+                              'pdf',
+                              'csv',
+                              'xlsx',
+                              'xls',
+                              'txt',
+                            ],
+                          );
+                          if (result == null || result.files.isEmpty) return;
+                          setSheetState(() => selectedFile = result.files.single);
+                        },
+                  child: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+                    decoration: BoxDecoration(
+                      color: AppTheme.darkPanel,
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(
+                        color: selectedFile != null
+                            ? AppTheme.primaryTeal
+                            : AppTheme.accentGray,
+                      ),
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(
+                          selectedFile == null
+                              ? Icons.upload_file_outlined
+                              : Icons.check_circle_outline,
+                          color: selectedFile == null
+                              ? AppTheme.textGray
+                              : AppTheme.primaryTeal,
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Text(
+                            selectedFile?.name ??
+                                'Selecionar arquivo (ou clique para abrir o seletor)',
+                            style: TextStyle(
+                              color: selectedFile == null
+                                  ? AppTheme.textGray
+                                  : AppTheme.textWhite,
+                              fontSize: 12,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 14),
+                SizedBox(
+                  width: double.infinity,
+                  height: 46,
+                  child: ElevatedButton.icon(
+                    onPressed: isSaving
+                        ? null
+                        : () async {
+                            if (selectedStoreId == null || selectedStoreId!.isEmpty) {
+                              _showUploadSnack('Selecione uma loja.', isError: true);
+                              return;
+                            }
+                            if (selectedFile == null || selectedFile!.bytes == null) {
+                              _showUploadSnack('Selecione um arquivo valido.', isError: true);
+                              return;
+                            }
+                            setSheetState(() => isSaving = true);
+                            try {
+                              final now = DateTime.now();
+                              final fileName = _buildUploadFileName(
+                                storeName: selectedStoreName,
+                                fileType: selectedType,
+                                originalName: selectedFile!.name,
+                                now: now,
+                              );
+                              final fullPath = await saveBytesToClientFolder(
+                                bytes: selectedFile!.bytes!,
+                                directoryPath: _uploadBaseFolder,
+                                fileName: fileName,
+                              );
+                              await _registerUploadOnSupabase(
+                                lojaId: selectedStoreId!,
+                                lojaNome: selectedStoreName,
+                                tipoArquivo: selectedType,
+                                arquivoNome: fileName,
+                              );
+                              if (!ctx.mounted) return;
+                              Navigator.of(ctx).pop();
+                              if (!mounted) return;
+                              _showUploadSnack(
+                                'Arquivo salvo com sucesso em: $fullPath',
+                              );
+                            } catch (e) {
+                              _showUploadSnack('Falha ao enviar arquivo: $e', isError: true);
+                            } finally {
+                              if (mounted) setSheetState(() => isSaving = false);
+                            }
+                          },
+                    icon: isSaving
+                        ? const SizedBox(
+                            width: 16,
+                            height: 16,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: AppTheme.background,
+                            ),
+                          )
+                        : const Icon(Icons.save_alt),
+                    label: Text(
+                      isSaving ? 'Salvando...' : 'Salvar envio',
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  InputDecoration _uploadInputDecoration({
+    required String label,
+    required IconData icon,
+  }) {
+    return InputDecoration(
+      labelText: label,
+      labelStyle: const TextStyle(color: AppTheme.textGray, fontSize: 12),
+      prefixIcon: Icon(icon, size: 18, color: AppTheme.primaryTeal),
+      filled: true,
+      fillColor: AppTheme.darkPanel,
+      contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: const BorderSide(color: AppTheme.accentGray),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: const BorderSide(color: AppTheme.accentGray),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: const BorderSide(color: AppTheme.primaryTeal),
+      ),
+    );
+  }
+
+  String? _resolveLoggedClientCnpj() {
+    if (!supabaseAvailable) return null;
+    final user = Supabase.instance.client.auth.currentUser;
+    if (user == null) return null;
+
+    final values = <dynamic>[
+      user.userMetadata?['cnpj'],
+      user.userMetadata?['cnpj_cliente'],
+      user.userMetadata?['client_cnpj'],
+      user.appMetadata['cnpj'],
+      user.appMetadata['cnpj_cliente'],
+      user.appMetadata['client_cnpj'],
+    ];
+
+    for (final v in values) {
+      final raw = (v ?? '').toString().trim();
+      if (raw.isNotEmpty) return raw;
+    }
+    return null;
+  }
+
+  Future<List<Map<String, dynamic>>> _fetchStoresByCnpj(String cnpj) async {
+    if (!supabaseAvailable) return <Map<String, dynamic>>[];
+    final normalizedTarget = _normalizeCnpj(cnpj);
+    final rows = await Supabase.instance.client
+        .from('lojas')
+        .select('id,nome_loja,cnpj')
+        .order('nome_loja', ascending: true);
+    final list = List<Map<String, dynamic>>.from(rows as List);
+    return list.where((row) {
+      final cnpjLoja = _normalizeCnpj('${row['cnpj'] ?? ''}');
+      return cnpjLoja.isNotEmpty && cnpjLoja == normalizedTarget;
+    }).toList();
+  }
+
+  String _normalizeCnpj(String value) => value.replaceAll(RegExp(r'\D'), '');
+
+  String _buildUploadFileName({
+    required String storeName,
+    required String fileType,
+    required String originalName,
+    required DateTime now,
+  }) {
+    final ext = _extractExtension(originalName);
+    final lojaSanitizada = storeName
+        .toUpperCase()
+        .replaceAll(RegExp(r'[^A-Z0-9]'), '');
+    final loja = lojaSanitizada.isEmpty ? 'LOJA' : lojaSanitizada;
+    final data =
+        '${now.day.toString().padLeft(2, '0')}_${now.month.toString().padLeft(2, '0')}_${now.year}';
+    return '${loja}_${data}_$fileType.$ext';
+  }
+
+  String _extractExtension(String fileName) {
+    final idx = fileName.lastIndexOf('.');
+    if (idx < 0 || idx == fileName.length - 1) return 'dat';
+    return fileName.substring(idx + 1).toLowerCase();
+  }
+
+  Future<void> _registerUploadOnSupabase({
+    required String lojaId,
+    required String lojaNome,
+    required String tipoArquivo,
+    required String arquivoNome,
+  }) async {
+    if (!supabaseAvailable) return;
+    final sku = 'ENVIO_${DateTime.now().millisecondsSinceEpoch}';
+    await Supabase.instance.client.from('tabela_nexus').insert({
+      'loja_id': lojaId,
+      'sku_id': sku,
+      'produto': 'Arquivo enviado: $arquivoNome',
+      'categoria': 'envio_$tipoArquivo',
+      'estoque_atual': 0,
+      'preco_custo': 0,
+      'preco_venda': 0,
+      'giro_30d': 0,
+      'data_vencimento': null,
+    });
+  }
+
+  void _showUploadSnack(String msg, {bool isError = false}) {
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(msg, style: const TextStyle(color: Colors.white)),
+        backgroundColor: isError ? AppTheme.criticalRed : AppTheme.primaryTeal,
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
+  }
 
   String _formatNum(double v) => v.toStringAsFixed(2);
 

@@ -44,7 +44,7 @@ class _StoreRegistrationScreenState extends State<StoreRegistrationScreen> {
 
   // Contrato PDF
   PlatformFile? _contratoFile;
-  bool _isUploadingPdf = false;
+  final bool _isUploadingPdf = false;
   final List<String> _segmentos = ['Alimentos', 'Moda', 'Bebidas', 'Higiene'];
   final List<String> _ufs = [
     'AC','AL','AP','AM','BA','CE','DF','ES','GO','MA','MT','MS','MG','PA','PB','PR','PE','PI','RJ','RN','RS','RO','RR','SC','SP','SE','TO'
@@ -135,7 +135,7 @@ class _StoreRegistrationScreenState extends State<StoreRegistrationScreen> {
         }
       }
 
-      final payload = {
+      final Map<String, dynamic> payload = {
         'nome_loja': _nomeCtrl.text.trim(),
         'cnpj': _cnpjCtrl.text.trim(),
         'razao_social': _razaoCtrl.text.trim(),
@@ -154,8 +154,8 @@ class _StoreRegistrationScreenState extends State<StoreRegistrationScreen> {
         'telefone_suporte': _telefoneSuporteCtrl.text.trim(),
         'plano': _plano,
         'status_instancia': 'Ativo',
-        if (contratoPublicUrl != null) 'url_contrato': contratoPublicUrl,
       };
+      payload['url_contrato'] = contratoPublicUrl;
 
       // Insere na tabela `lojas` — Supabase gera o UUID (id) automaticamente.
       // O backend (schema) pode ser ajustado depois para aceitar essas colunas.

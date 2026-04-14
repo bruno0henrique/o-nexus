@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:nexus_engine/screens/main_application.dart';
 import 'package:nexus_engine/theme/app_theme.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:nexus_engine/main.dart' show supabaseAvailable;
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -13,17 +15,60 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _obscurePassword = true;
+  bool _isLoading = false;
   String _errorMessage = '';
 
-  void _handleLogin() {
-    if (_emailController.text == 'admin@nexus' && _passwordController.text == 'password123') {
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _handleLogin() async {
+    if (_isLoading) return;
+    if (!supabaseAvailable) {
+      setState(() {
+        _errorMessage = 'Supabase indisponivel no momento. Verifique a configuracao.';
+      });
+      return;
+    }
+
+    final email = _emailController.text.trim();
+    final password = _passwordController.text;
+    if (email.isEmpty || password.isEmpty) {
+      setState(() {
+        _errorMessage = 'Preencha email e senha para continuar.';
+      });
+      return;
+    }
+
+    setState(() {
+      _isLoading = true;
+      _errorMessage = '';
+    });
+
+    try {
+      await Supabase.instance.client.auth.signInWithPassword(
+        email: email,
+        password: password,
+      );
+      if (!mounted) return;
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => const MainApplication()),
       );
-    } else {
+    } on AuthException catch (e) {
       setState(() {
-        _errorMessage = 'Invalid credentials. Please use admin@nexus / password123';
+        _errorMessage = e.message;
       });
+    } catch (_) {
+      setState(() {
+        _errorMessage = 'Nao foi possivel autenticar agora. Tente novamente.';
+      });
+    } finally {
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
     }
   }
 
@@ -151,17 +196,30 @@ class _LoginScreenState extends State<LoginScreen> {
                         width: double.infinity,
                         height: 48,
                         child: ElevatedButton(
-                          onPressed: _handleLogin,
+                          onPressed: _isLoading ? null : _handleLogin,
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppTheme.primaryTeal,
                             foregroundColor: AppTheme.background,
                           ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
-                              Text('LOGIN', style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 2)),
-                              SizedBox(width: 8),
-                              Icon(Icons.arrow_forward, size: 18),
+                            children: [
+                              if (_isLoading) ...[
+                                const SizedBox(
+                                  width: 18,
+                                  height: 18,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2.2,
+                                    color: AppTheme.background,
+                                  ),
+                                ),
+                                const SizedBox(width: 10),
+                                const Text('ENTRANDO...', style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 1.5)),
+                              ] else ...[
+                                const Text('LOGIN', style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 2)),
+                                const SizedBox(width: 8),
+                                const Icon(Icons.arrow_forward, size: 18),
+                              ],
                             ],
                           ),
                         ),

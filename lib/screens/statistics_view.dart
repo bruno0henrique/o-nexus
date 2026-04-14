@@ -10,7 +10,9 @@ const _headerStyle = TextStyle(
 );
 
 class StatisticsView extends StatefulWidget {
-  const StatisticsView({super.key});
+  final String? storeId;
+  final bool showStoreSelector;
+  const StatisticsView({super.key, this.storeId, this.showStoreSelector = true});
 
   @override
   State<StatisticsView> createState() => _StatisticsViewState();
@@ -43,7 +45,21 @@ class _StatisticsViewState extends State<StatisticsView> {
   @override
   void initState() {
     super.initState();
+    if (widget.storeId != null && widget.storeId!.isNotEmpty) {
+      _selectedMercadinhoId = widget.storeId;
+    }
     _loadMercadinhos();
+  }
+
+  @override
+  void didUpdateWidget(covariant StatisticsView oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.storeId != widget.storeId) {
+      setState(() {
+        _selectedMercadinhoId = widget.storeId;
+      });
+      _loadData();
+    }
   }
 
   Future<void> _loadMercadinhos() async {
@@ -51,7 +67,7 @@ class _StatisticsViewState extends State<StatisticsView> {
       final mercadinhos = await _adminService.fetchMercadinhos();
       setState(() {
         _mercadinhos = mercadinhos;
-        if (mercadinhos.isNotEmpty && _selectedMercadinhoId == null) {
+        if (widget.storeId == null && mercadinhos.isNotEmpty && _selectedMercadinhoId == null) {
           _selectedMercadinhoId = '${mercadinhos.first['loja_id']}';
         }
       });
@@ -216,7 +232,7 @@ class _StatisticsViewState extends State<StatisticsView> {
 
   // ── Header ──
   Widget _buildHeader(bool isMobile) {
-    final mercadinhoSelector = _mercadinhos.isNotEmpty
+    final mercadinhoSelector = (widget.showStoreSelector && widget.storeId == null && _mercadinhos.isNotEmpty)
         ? Container(
             padding: const EdgeInsets.symmetric(horizontal: 12),
             decoration: BoxDecoration(

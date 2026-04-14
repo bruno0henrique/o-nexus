@@ -1,117 +1,96 @@
 import 'package:flutter/material.dart';
+import 'package:nexus_engine/services/admin_service.dart';
 import 'package:nexus_engine/theme/app_theme.dart';
 
-// ============================================================
-// Dados estáticos de demonstração
-// ============================================================
-final List<Map<String, dynamic>> _demoProducts = [
-  {'produto': 'Vinho Tinto Reserva', 'sku': '8826-VT', 'categoria': 'Bebidas Alcoólicas', 'estoque': 25, 'estoqueMax': 100, 'preco': 89.90, 'valorTotal': 2247.50},
-  {'produto': 'Cerveja Lata 350ml', 'sku': '1014-CL', 'categoria': 'Bebidas', 'estoque': 8, 'estoqueMax': 100, 'preco': 4.50, 'valorTotal': 360.00},
-  {'produto': 'Iogurte Grego Natural', 'sku': '5821-IG', 'categoria': 'Laticínios', 'estoque': 85, 'estoqueMax': 100, 'preco': 3.20, 'valorTotal': 1280.00},
-  {'produto': 'Arroz Integral 1kg', 'sku': '2290-AI', 'categoria': 'Grãos', 'estoque': 60, 'estoqueMax': 100, 'preco': 7.90, 'valorTotal': 948.00},
-  {'produto': 'Detergente Líquido', 'sku': '9931-DL', 'categoria': 'Limpeza', 'estoque': 45, 'estoqueMax': 100, 'preco': 2.50, 'valorTotal': 562.50},
-  {'produto': 'Chocolate Amargo 70%', 'sku': '4412-CA', 'categoria': 'Confeitaria', 'estoque': 100, 'estoqueMax': 100, 'preco': 12.90, 'valorTotal': 2580.00},
-  {'produto': 'Leite Integral 1L', 'sku': '1100-LI', 'categoria': 'Laticínios', 'estoque': 72, 'estoqueMax': 100, 'preco': 5.99, 'valorTotal': 431.28},
-  {'produto': 'Café Torrado 500g', 'sku': '3301-CT', 'categoria': 'Bebidas', 'estoque': 38, 'estoqueMax': 100, 'preco': 22.50, 'valorTotal': 855.00},
-  {'produto': 'Sabão em Pó 1kg', 'sku': '9900-SP', 'categoria': 'Limpeza', 'estoque': 55, 'estoqueMax': 100, 'preco': 9.90, 'valorTotal': 544.50},
-  {'produto': 'Macarrão Espaguete', 'sku': '2201-ME', 'categoria': 'Grãos', 'estoque': 90, 'estoqueMax': 100, 'preco': 4.80, 'valorTotal': 432.00},
-  {'produto': 'Azeite Extra Virgem', 'sku': '3350-AV', 'categoria': 'Mercearia', 'estoque': 20, 'estoqueMax': 100, 'preco': 35.00, 'valorTotal': 700.00},
-  {'produto': 'Queijo Mussarela', 'sku': '5800-QM', 'categoria': 'Laticínios', 'estoque': 42, 'estoqueMax': 100, 'preco': 29.90, 'valorTotal': 1255.80},
-  {'produto': 'Refrigerante 2L', 'sku': '1050-RF', 'categoria': 'Bebidas', 'estoque': 65, 'estoqueMax': 100, 'preco': 8.50, 'valorTotal': 552.50},
-  {'produto': 'Papel Higiênico 12un', 'sku': '9800-PH', 'categoria': 'Limpeza', 'estoque': 30, 'estoqueMax': 100, 'preco': 18.90, 'valorTotal': 567.00},
-  {'produto': 'Biscoito Recheado', 'sku': '4450-BR', 'categoria': 'Confeitaria', 'estoque': 78, 'estoqueMax': 100, 'preco': 3.50, 'valorTotal': 273.00},
-  {'produto': 'Óleo de Soja 900ml', 'sku': '3370-OS', 'categoria': 'Mercearia', 'estoque': 50, 'estoqueMax': 100, 'preco': 7.20, 'valorTotal': 360.00},
-  {'produto': 'Manteiga 200g', 'sku': '5830-MT', 'categoria': 'Laticínios', 'estoque': 15, 'estoqueMax': 100, 'preco': 11.50, 'valorTotal': 172.50},
-  {'produto': 'Água Mineral 1.5L', 'sku': '1070-AM', 'categoria': 'Bebidas', 'estoque': 95, 'estoqueMax': 100, 'preco': 2.90, 'valorTotal': 275.50},
-  {'produto': 'Desinfetante 2L', 'sku': '9950-DF', 'categoria': 'Limpeza', 'estoque': 33, 'estoqueMax': 100, 'preco': 6.80, 'valorTotal': 224.40},
-  {'produto': 'Feijão Preto 1kg', 'sku': '2210-FP', 'categoria': 'Grãos', 'estoque': 48, 'estoqueMax': 100, 'preco': 8.90, 'valorTotal': 427.20},
-  {'produto': 'Suco de Laranja 1L', 'sku': '1090-SL', 'categoria': 'Bebidas', 'estoque': 58, 'estoqueMax': 100, 'preco': 6.50, 'valorTotal': 377.00},
-  {'produto': 'Farinha de Trigo 1kg', 'sku': '2250-FT', 'categoria': 'Grãos', 'estoque': 70, 'estoqueMax': 100, 'preco': 5.20, 'valorTotal': 364.00},
-  {'produto': 'Creme de Leite', 'sku': '5850-CL', 'categoria': 'Laticínios', 'estoque': 40, 'estoqueMax': 100, 'preco': 4.90, 'valorTotal': 196.00},
-  {'produto': 'Açúcar Cristal 1kg', 'sku': '3390-AC', 'categoria': 'Mercearia', 'estoque': 82, 'estoqueMax': 100, 'preco': 4.50, 'valorTotal': 369.00},
-  {'produto': 'Sardinha em Lata', 'sku': '3400-SL', 'categoria': 'Mercearia', 'estoque': 27, 'estoqueMax': 100, 'preco': 7.80, 'valorTotal': 210.60},
-  {'produto': 'Sabonete Líquido', 'sku': '9970-SB', 'categoria': 'Limpeza', 'estoque': 62, 'estoqueMax': 100, 'preco': 8.90, 'valorTotal': 551.80},
-  {'produto': 'Bolo Pronto', 'sku': '4470-BP', 'categoria': 'Confeitaria', 'estoque': 12, 'estoqueMax': 100, 'preco': 15.00, 'valorTotal': 180.00},
-  {'produto': 'Milho Verde Lata', 'sku': '3420-MV', 'categoria': 'Mercearia', 'estoque': 44, 'estoqueMax': 100, 'preco': 4.20, 'valorTotal': 184.80},
-  {'produto': 'Presunto Fatiado', 'sku': '5870-PF', 'categoria': 'Laticínios', 'estoque': 18, 'estoqueMax': 100, 'preco': 16.90, 'valorTotal': 304.20},
-  {'produto': 'Energético 250ml', 'sku': '1110-EN', 'categoria': 'Bebidas', 'estoque': 52, 'estoqueMax': 100, 'preco': 9.90, 'valorTotal': 514.80},
-  {'produto': 'Molho de Tomate', 'sku': '3440-MT', 'categoria': 'Mercearia', 'estoque': 67, 'estoqueMax': 100, 'preco': 3.90, 'valorTotal': 261.30},
-  {'produto': 'Achocolatado 400g', 'sku': '4490-AC', 'categoria': 'Confeitaria', 'estoque': 35, 'estoqueMax': 100, 'preco': 6.50, 'valorTotal': 227.50},
-  {'produto': 'Ervilha em Lata', 'sku': '3460-EL', 'categoria': 'Mercearia', 'estoque': 39, 'estoqueMax': 100, 'preco': 4.10, 'valorTotal': 159.90},
-  {'produto': 'Iogurte de Morango', 'sku': '5890-IM', 'categoria': 'Laticínios', 'estoque': 56, 'estoqueMax': 100, 'preco': 2.80, 'valorTotal': 156.80},
-  {'produto': 'Chá Mate 1.5L', 'sku': '1130-CM', 'categoria': 'Bebidas', 'estoque': 43, 'estoqueMax': 100, 'preco': 5.50, 'valorTotal': 236.50},
-  {'produto': 'Esponja de Aço', 'sku': '9990-EA', 'categoria': 'Limpeza', 'estoque': 88, 'estoqueMax': 100, 'preco': 2.20, 'valorTotal': 193.60},
-  {'produto': 'Lentilha 500g', 'sku': '2270-LT', 'categoria': 'Grãos', 'estoque': 22, 'estoqueMax': 100, 'preco': 9.50, 'valorTotal': 209.00},
-  {'produto': 'Requeijão Cremoso', 'sku': '5910-RC', 'categoria': 'Laticínios', 'estoque': 31, 'estoqueMax': 100, 'preco': 8.70, 'valorTotal': 269.70},
-  {'produto': 'Cerveja Long Neck', 'sku': '1015-CN', 'categoria': 'Bebidas Alcoólicas', 'estoque': 76, 'estoqueMax': 100, 'preco': 6.90, 'valorTotal': 524.40},
-  {'produto': 'Amaciante 2L', 'sku': '9910-AM', 'categoria': 'Limpeza', 'estoque': 29, 'estoqueMax': 100, 'preco': 11.90, 'valorTotal': 345.10},
-  {'produto': 'Gelatina em Pó', 'sku': '4510-GP', 'categoria': 'Confeitaria', 'estoque': 91, 'estoqueMax': 100, 'preco': 1.90, 'valorTotal': 172.90},
-  {'produto': 'Sal Refinado 1kg', 'sku': '3480-SR', 'categoria': 'Mercearia', 'estoque': 80, 'estoqueMax': 100, 'preco': 2.50, 'valorTotal': 200.00},
-  {'produto': 'Vinagre 750ml', 'sku': '3500-VG', 'categoria': 'Mercearia', 'estoque': 54, 'estoqueMax': 100, 'preco': 3.80, 'valorTotal': 205.20},
-  {'produto': 'Cream Cheese', 'sku': '5930-CC', 'categoria': 'Laticínios', 'estoque': 19, 'estoqueMax': 100, 'preco': 12.90, 'valorTotal': 245.10},
-  {'produto': 'Vodka 1L', 'sku': '8840-VK', 'categoria': 'Bebidas Alcoólicas', 'estoque': 14, 'estoqueMax': 100, 'preco': 42.00, 'valorTotal': 588.00},
-  {'produto': 'Limpa Vidros 500ml', 'sku': '9920-LV', 'categoria': 'Limpeza', 'estoque': 47, 'estoqueMax': 100, 'preco': 7.50, 'valorTotal': 352.50},
-  {'produto': 'Aveia em Flocos', 'sku': '2290-AF', 'categoria': 'Grãos', 'estoque': 63, 'estoqueMax': 100, 'preco': 6.80, 'valorTotal': 428.40},
-  {'produto': 'Doce de Leite', 'sku': '4530-DL', 'categoria': 'Confeitaria', 'estoque': 37, 'estoqueMax': 100, 'preco': 9.90, 'valorTotal': 366.30},
-  {'produto': 'Whisky 750ml', 'sku': '8860-WK', 'categoria': 'Bebidas Alcoólicas', 'estoque': 7, 'estoqueMax': 100, 'preco': 89.90, 'valorTotal': 629.30},
-  {'produto': 'Catchup 400g', 'sku': '3520-CT', 'categoria': 'Mercearia', 'estoque': 71, 'estoqueMax': 100, 'preco': 5.90, 'valorTotal': 418.90},
-  {'produto': 'Leite Condensado', 'sku': '4550-LC', 'categoria': 'Confeitaria', 'estoque': 46, 'estoqueMax': 100, 'preco': 6.20, 'valorTotal': 285.20},
-  {'produto': 'Maionese 500g', 'sku': '3540-MN', 'categoria': 'Mercearia', 'estoque': 59, 'estoqueMax': 100, 'preco': 7.50, 'valorTotal': 442.50},
-  {'produto': 'Grão de Bico 500g', 'sku': '2310-GB', 'categoria': 'Grãos', 'estoque': 26, 'estoqueMax': 100, 'preco': 8.40, 'valorTotal': 218.40},
-  {'produto': 'Chocolate ao Leite', 'sku': '4570-CL', 'categoria': 'Confeitaria', 'estoque': 83, 'estoqueMax': 100, 'preco': 7.90, 'valorTotal': 655.70},
-  {'produto': 'Cerveja Puro Malte', 'sku': '8880-PM', 'categoria': 'Bebidas Alcoólicas', 'estoque': 34, 'estoqueMax': 100, 'preco': 5.90, 'valorTotal': 200.60},
-  {'produto': 'Álcool Gel 500ml', 'sku': '9940-AG', 'categoria': 'Limpeza', 'estoque': 68, 'estoqueMax': 100, 'preco': 8.90, 'valorTotal': 605.20},
-  {'produto': 'Granola 800g', 'sku': '2330-GR', 'categoria': 'Grãos', 'estoque': 41, 'estoqueMax': 100, 'preco': 14.90, 'valorTotal': 610.90},
-  {'produto': 'Sorvete 2L', 'sku': '4590-SV', 'categoria': 'Confeitaria', 'estoque': 11, 'estoqueMax': 100, 'preco': 19.90, 'valorTotal': 218.90},
-  {'produto': 'Suco de Uva 1L', 'sku': '1150-SU', 'categoria': 'Bebidas', 'estoque': 53, 'estoqueMax': 100, 'preco': 7.90, 'valorTotal': 418.70},
-  {'produto': 'Toalha de Papel', 'sku': '9960-TP', 'categoria': 'Limpeza', 'estoque': 75, 'estoqueMax': 100, 'preco': 5.50, 'valorTotal': 412.50},
-];
-
 class UserModeView extends StatefulWidget {
-  const UserModeView({super.key});
+  final String? storeId;
+  final String? storeName;
+  const UserModeView({super.key, this.storeId, this.storeName});
 
   @override
   State<UserModeView> createState() => _UserModeViewState();
 }
 
 class _UserModeViewState extends State<UserModeView> {
+  final AdminService _service = AdminService();
   final TextEditingController _searchController = TextEditingController();
+
+  bool _isLoading = true;
+  String? _error;
+  List<Map<String, dynamic>> _rows = [];
+
   String _searchQuery = '';
   String? _filterCategoria;
   String? _filterEstoqueRange;
-
   int _currentPage = 0;
   static const int _pageSize = 50;
 
+  @override
+  void initState() {
+    super.initState();
+    _loadData();
+  }
+
+  @override
+  void didUpdateWidget(covariant UserModeView oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.storeId != widget.storeId) {
+      _loadData();
+    }
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _loadData() async {
+    setState(() {
+      _isLoading = true;
+      _error = null;
+    });
+    try {
+      final data = await _service.fetchAuditoria(mercadinhoId: widget.storeId);
+      setState(() {
+        _rows = data;
+        _isLoading = false;
+        _currentPage = 0;
+      });
+    } catch (e) {
+      setState(() {
+        _error = e.toString();
+        _isLoading = false;
+      });
+    }
+  }
+
   List<Map<String, dynamic>> get _filteredProducts {
-    return _demoProducts.where((p) {
+    return _rows.where((p) {
       if (_searchQuery.isNotEmpty) {
         final q = _searchQuery.toLowerCase();
-        final match = (p['produto'] as String).toLowerCase().contains(q) ||
-            (p['sku'] as String).toLowerCase().contains(q) ||
-            (p['categoria'] as String).toLowerCase().contains(q);
+        final match = '${p['produto'] ?? ''}'.toLowerCase().contains(q) ||
+            '${p['sku_id'] ?? ''}'.toLowerCase().contains(q) ||
+            '${p['categoria'] ?? ''}'.toLowerCase().contains(q);
         if (!match) return false;
       }
       if (_filterCategoria != null && _filterCategoria!.isNotEmpty) {
-        if (p['categoria'] != _filterCategoria) return false;
+        if ('${p['categoria'] ?? ''}' != _filterCategoria) return false;
       }
       if (_filterEstoqueRange != null) {
-        final pct = ((p['estoque'] as int) / (p['estoqueMax'] as int) * 100).round();
-        if (_filterEstoqueRange == 'baixo' && pct > 25) return false;
-        if (_filterEstoqueRange == 'medio' && (pct <= 25 || pct > 70)) return false;
-        if (_filterEstoqueRange == 'alto' && pct <= 70) return false;
+        final estoque = ((p['estoque_atual'] ?? 0) as num).toDouble();
+        if (_filterEstoqueRange == 'baixo' && estoque > 10) return false;
+        if (_filterEstoqueRange == 'medio' && (estoque <= 10 || estoque > 40)) return false;
+        if (_filterEstoqueRange == 'alto' && estoque <= 40) return false;
       }
       return true;
-    }).toList()
-      ..sort((a, b) {
-        final pctA = (a['estoque'] as int) / (a['estoqueMax'] as int);
-        final pctB = (b['estoque'] as int) / (b['estoqueMax'] as int);
-        return pctA.compareTo(pctB);
-      });
+    }).toList();
   }
 
   List<String> get _allCategories {
-    return _demoProducts.map((p) => p['categoria'] as String).toSet().toList()..sort();
+    final set = _rows.map((p) => '${p['categoria'] ?? 'Sem categoria'}').toSet().toList();
+    set.sort();
+    return set;
   }
 
   int get _totalPages => (_filteredProducts.length / _pageSize).ceil().clamp(1, 999);
@@ -123,21 +102,67 @@ class _UserModeViewState extends State<UserModeView> {
     return _filteredProducts.sublist(start, end);
   }
 
-  @override
-  void dispose() {
-    _searchController.dispose();
-    super.dispose();
-  }
+  int get _totalSkus => _rows.length;
+  int get _semEstoque => _rows.where((e) => ((e['estoque_atual'] ?? 0) as num) <= 0).length;
+  double get _valorTotalEstoque => _rows.fold<double>(
+      0,
+      (acc, e) =>
+          acc + (((e['estoque_atual'] ?? 0) as num) * ((e['preco_venda'] ?? 0) as num)).toDouble());
+  double get _capitalCusto => _rows.fold<double>(
+      0,
+      (acc, e) =>
+          acc + (((e['estoque_atual'] ?? 0) as num) * ((e['preco_custo'] ?? 0) as num)).toDouble());
 
   @override
   Widget build(BuildContext context) {
+    if (_isLoading) {
+      return const Center(child: CircularProgressIndicator(color: AppTheme.primaryTeal));
+    }
+    if (_error != null) {
+      return Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.error_outline, color: AppTheme.criticalRed, size: 36),
+            const SizedBox(height: 10),
+            Text(_error!, style: const TextStyle(color: AppTheme.textGray), textAlign: TextAlign.center),
+            const SizedBox(height: 12),
+            OutlinedButton.icon(
+              onPressed: _loadData,
+              icon: const Icon(Icons.refresh),
+              label: const Text('Tentar novamente'),
+            ),
+          ],
+        ),
+      );
+    }
+
     final isMobile = MediaQuery.of(context).size.width < 600;
     return SingleChildScrollView(
       padding: EdgeInsets.all(isMobile ? 16.0 : 32.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // ── Visão de Capital ──
+          Row(
+            children: [
+              const Icon(Icons.storefront, color: AppTheme.primaryTeal, size: 18),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  widget.storeName ?? 'Loja selecionada',
+                  style: const TextStyle(color: AppTheme.textGray, fontSize: 12),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              IconButton(
+                onPressed: _loadData,
+                icon: const Icon(Icons.refresh, color: AppTheme.primaryTeal),
+                tooltip: 'Atualizar',
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          // ── Visão de Capital (dinâmica) ──
           Row(
             children: const [
               Icon(Icons.account_balance_wallet_outlined, color: AppTheme.primaryTeal, size: 22),
@@ -153,9 +178,9 @@ class _UserModeViewState extends State<UserModeView> {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Expanded(child: _buildExecCard('DESPERDÍCIO EVITADO (MÊS)', 'R\$ 1.300,00', icon: Icons.arrow_upward, iconColor: AppTheme.primaryTeal)),
+                Expanded(child: _buildExecCard('VALOR TOTAL EM ESTOQUE', _money(_valorTotalEstoque), icon: Icons.arrow_upward, iconColor: AppTheme.primaryTeal)),
                 SizedBox(width: isMobile ? 12 : 24),
-                Expanded(child: _buildExecCard('CAPITAL TRAVADO NO ESTOQUE', 'R\$ 4.500,00', subtitle: 'Corresponde a 12% do inventário total ativo', valueColor: AppTheme.primaryTeal)),
+                Expanded(child: _buildExecCard('CAPITAL EM CUSTO', _money(_capitalCusto), subtitle: 'SKUs ativos: $_totalSkus', valueColor: AppTheme.primaryTeal)),
               ],
             ),
           ),
@@ -206,7 +231,7 @@ class _UserModeViewState extends State<UserModeView> {
           _buildInventoryTable(isMobile),
           SizedBox(height: isMobile ? 20 : 32),
 
-          // ── Visão do Armazém + Previsão IA ──
+          // ── Blocos informativos ──
           if (isMobile) ...[
             Container(
               padding: const EdgeInsets.all(20),
@@ -217,11 +242,11 @@ class _UserModeViewState extends State<UserModeView> {
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
+                children: [
                   Text('Visão do Armazém', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppTheme.textWhite)),
                   SizedBox(height: 8),
                   Text(
-                    'Sistema de monitoramento térmico e de validade operando em 99,8% de precisão. Sem inconsistências detectadas nos últimos 7 dias.',
+                    'Itens sem estoque: $_semEstoque.\nUse os filtros e o inventário detalhado para priorizar reposição.',
                     style: TextStyle(color: AppTheme.textGray, height: 1.5, fontSize: 13),
                   ),
                 ],
@@ -244,7 +269,7 @@ class _UserModeViewState extends State<UserModeView> {
                     children: [
                       Text('Previsão IA', style: TextStyle(color: AppTheme.textWhite, fontWeight: FontWeight.bold, fontSize: 14)),
                       SizedBox(height: 4),
-                      Text('Crescimento de demanda de 15% para itens de higiene no próximo trimestre.', style: TextStyle(color: AppTheme.textGray, fontSize: 12)),
+                      Text('Resumo alimentado pelos dados reais da loja selecionada no Supabase.', style: TextStyle(color: AppTheme.textGray, fontSize: 12)),
                     ],
                   )),
                 ],
@@ -266,11 +291,11 @@ class _UserModeViewState extends State<UserModeView> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.end,
-                      children: const [
+                      children: [
                         Text('Visão do Armazém', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: AppTheme.textWhite)),
                         SizedBox(height: 8),
                         Text(
-                          'Sistema de monitoramento térmico e de validade operando em\n99,8% de precisão. Sem inconsistências detectadas nos últimos 7 dias.',
+                          'Itens sem estoque: $_semEstoque.\nAcompanhe as rupturas e reposicoes por categoria.',
                           style: TextStyle(color: AppTheme.textGray, height: 1.5, fontSize: 13),
                         ),
                       ],
@@ -297,7 +322,7 @@ class _UserModeViewState extends State<UserModeView> {
                           Text('Previsão IA', style: TextStyle(color: AppTheme.textWhite, fontWeight: FontWeight.bold, fontSize: 16)),
                           SizedBox(height: 8),
                           Text(
-                            'Crescimento de demanda de\n15% para itens de higiene no\npróximo trimestre.',
+                            'Resumo alimentado por\nestoque atual da loja\nselecionada.',
                             textAlign: TextAlign.center,
                             style: TextStyle(color: AppTheme.textGray, fontSize: 12),
                           ),
@@ -313,23 +338,21 @@ class _UserModeViewState extends State<UserModeView> {
     );
   }
 
-  // ================================================================
-  // AÇÕES DO DIA — 3 cards estáticos
-  // ================================================================
+  String _money(double v) => 'R\$ ${v.toStringAsFixed(2).replaceAll('.', ',')}';
+
   Widget _buildAcoesCards(bool isMobile) {
     final card1 = _buildAcaoCard(
       borderColor: AppTheme.warningOrange,
       icon: Icons.access_time_filled,
       iconColor: AppTheme.warningOrange,
-      titulo: 'Estoque Parado',
+      titulo: 'Rupturas',
       corpo: RichText(
-        text: const TextSpan(
+        text: TextSpan(
           style: TextStyle(color: AppTheme.textGray, fontSize: 13, height: 1.5),
           children: [
-            TextSpan(text: 'O produto '),
-            TextSpan(text: 'Vinho Tinto', style: TextStyle(fontWeight: FontWeight.bold, color: AppTheme.textWhite)),
-            TextSpan(text: ' não vende há 15 dias.\n\n'),
-            TextSpan(text: 'Sugestão: Promoção na frente do caixa.', style: TextStyle(fontStyle: FontStyle.italic)),
+            const TextSpan(text: 'Produtos sem estoque agora: '),
+            TextSpan(text: '$_semEstoque', style: const TextStyle(fontWeight: FontWeight.bold, color: AppTheme.textWhite)),
+            const TextSpan(text: '\n\nSugestão: priorizar itens com maior giro.'),
           ],
         ),
       ),
@@ -340,14 +363,14 @@ class _UserModeViewState extends State<UserModeView> {
       borderColor: AppTheme.primaryTeal,
       icon: Icons.shopping_cart,
       iconColor: AppTheme.primaryTeal,
-      titulo: 'Ponto de Pedido',
+      titulo: 'Inventário Filtrado',
       corpo: RichText(
-        text: const TextSpan(
+        text: TextSpan(
           style: TextStyle(color: AppTheme.textGray, fontSize: 13, height: 1.5),
           children: [
-            TextSpan(text: 'O estoque de '),
-            TextSpan(text: 'Cerveja Lata', style: TextStyle(fontWeight: FontWeight.bold, color: AppTheme.textWhite)),
-            TextSpan(text: ' zera em 4 dias.\n\nFaça o pedido ao fornecedor hoje.'),
+            const TextSpan(text: 'Registros visíveis com filtros atuais: '),
+            TextSpan(text: '${_filteredProducts.length}', style: const TextStyle(fontWeight: FontWeight.bold, color: AppTheme.textWhite)),
+            const TextSpan(text: '.\n\nAjuste categoria e estoque para foco operacional.'),
           ],
         ),
       ),
@@ -358,14 +381,14 @@ class _UserModeViewState extends State<UserModeView> {
       borderColor: const Color(0xFF8B4513),
       icon: Icons.warning_amber_rounded,
       iconColor: AppTheme.criticalRed,
-      titulo: 'Risco de Perda',
+      titulo: 'Capital em Estoque',
       corpo: RichText(
-        text: const TextSpan(
+        text: TextSpan(
           style: TextStyle(color: AppTheme.textGray, fontSize: 13, height: 1.5),
           children: [
-            TextSpan(text: '20 unidades', style: TextStyle(fontWeight: FontWeight.bold, color: AppTheme.criticalRed)),
-            TextSpan(text: ' de Iogurte vencem em 7 dias.\n\n'),
-            TextSpan(text: 'Necessário ação imediata de queima.', style: TextStyle(fontStyle: FontStyle.italic)),
+            const TextSpan(text: 'Valor de venda acumulado:\n'),
+            TextSpan(text: _money(_valorTotalEstoque), style: const TextStyle(fontWeight: FontWeight.bold, color: AppTheme.criticalRed)),
+            const TextSpan(text: '\n\nMonitore para evitar capital parado.'),
           ],
         ),
       ),
@@ -464,9 +487,6 @@ class _UserModeViewState extends State<UserModeView> {
     );
   }
 
-  // ================================================================
-  // PESQUISA + FILTROS
-  // ================================================================
   Widget _buildSearchAndFilters(bool isMobile) {
     return Container(
       padding: EdgeInsets.all(isMobile ? 12 : 16),
@@ -567,9 +587,6 @@ class _UserModeViewState extends State<UserModeView> {
     );
   }
 
-  // ================================================================
-  // TABELA + PAGINAÇÃO
-  // ================================================================
   Widget _buildInventoryTable(bool isMobile) {
     final products = _pageProducts;
     if (isMobile) return _buildMobileInventoryList(products);
@@ -595,7 +612,8 @@ class _UserModeViewState extends State<UserModeView> {
             ...products.asMap().entries.map((entry) {
               final i = entry.key;
               final item = entry.value;
-              final estoquePct = ((item['estoque'] as int) / (item['estoqueMax'] as int) * 100).round();
+              final estoque = ((item['estoque_atual'] ?? 0) as num).toInt();
+              final estoquePct = estoque <= 0 ? 0 : (estoque >= 100 ? 100 : estoque);
               final barColor = estoquePct <= 10 ? AppTheme.criticalRed : estoquePct <= 25 ? AppTheme.warningOrange : AppTheme.primaryTeal;
 
               return Container(
@@ -612,21 +630,21 @@ class _UserModeViewState extends State<UserModeView> {
                     // Linha 1: nome + preço
                     Row(
                       children: [
-                        Expanded(child: Text(item['produto'] as String, style: const TextStyle(color: AppTheme.textWhite, fontSize: 14, fontWeight: FontWeight.w600), overflow: TextOverflow.ellipsis)),
+                        Expanded(child: Text('${item['produto'] ?? '-'}', style: const TextStyle(color: AppTheme.textWhite, fontSize: 14, fontWeight: FontWeight.w600), overflow: TextOverflow.ellipsis)),
                         const SizedBox(width: 8),
-                        Text('R\$ ${(item['preco'] as double).toStringAsFixed(2).replaceAll('.', ',')}', style: const TextStyle(color: AppTheme.textWhite, fontSize: 13, fontWeight: FontWeight.bold)),
+                        Text('R\$ ${((item['preco_venda'] ?? 0) as num).toStringAsFixed(2).replaceAll('.', ',')}', style: const TextStyle(color: AppTheme.textWhite, fontSize: 13, fontWeight: FontWeight.bold)),
                       ],
                     ),
                     const SizedBox(height: 4),
                     // Linha 2: SKU + categoria
                     Row(
                       children: [
-                        Text('SKU: ${item['sku']}', style: const TextStyle(color: AppTheme.textGray, fontSize: 10)),
+                        Text('SKU: ${item['sku_id'] ?? '-'}', style: const TextStyle(color: AppTheme.textGray, fontSize: 10)),
                         const SizedBox(width: 12),
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
                           decoration: BoxDecoration(color: AppTheme.teal10, borderRadius: BorderRadius.circular(3)),
-                          child: Text(item['categoria'] as String, style: const TextStyle(color: AppTheme.primaryTeal, fontSize: 9)),
+                          child: Text('${item['categoria'] ?? '-'}', style: const TextStyle(color: AppTheme.primaryTeal, fontSize: 9)),
                         ),
                       ],
                     ),
@@ -646,7 +664,7 @@ class _UserModeViewState extends State<UserModeView> {
                         const SizedBox(width: 10),
                         SizedBox(width: 36, child: Text('$estoquePct%', style: TextStyle(color: barColor, fontSize: 12, fontWeight: FontWeight.bold))),
                         const SizedBox(width: 8),
-                        Text('R\$ ${(item['valorTotal'] as double).toStringAsFixed(0)}', style: const TextStyle(color: AppTheme.primaryTeal, fontSize: 11, fontWeight: FontWeight.bold)),
+                        Text(_money((((item['estoque_atual'] ?? 0) as num) * ((item['preco_venda'] ?? 0) as num)).toDouble()), style: const TextStyle(color: AppTheme.primaryTeal, fontSize: 11, fontWeight: FontWeight.bold)),
                       ],
                     ),
                   ],
@@ -692,7 +710,8 @@ class _UserModeViewState extends State<UserModeView> {
             ...products.asMap().entries.map((entry) {
               final i = entry.key;
               final item = entry.value;
-              final estoquePct = ((item['estoque'] as int) / (item['estoqueMax'] as int) * 100).round();
+              final estoque = ((item['estoque_atual'] ?? 0) as num).toInt();
+              final estoquePct = estoque <= 0 ? 0 : (estoque >= 100 ? 100 : estoque);
               return Container(
                 padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
                 decoration: BoxDecoration(
@@ -704,12 +723,12 @@ class _UserModeViewState extends State<UserModeView> {
                     Expanded(flex: 3, child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(item['produto'] as String, style: const TextStyle(color: AppTheme.textWhite, fontSize: 13, fontWeight: FontWeight.w500), overflow: TextOverflow.ellipsis),
+                        Text('${item['produto'] ?? '-'}', style: const TextStyle(color: AppTheme.textWhite, fontSize: 13, fontWeight: FontWeight.w500), overflow: TextOverflow.ellipsis),
                         const SizedBox(height: 2),
-                        Text('SKU: ${item['sku']}', style: const TextStyle(color: AppTheme.textGray, fontSize: 10)),
+                        Text('SKU: ${item['sku_id'] ?? '-'}', style: const TextStyle(color: AppTheme.textGray, fontSize: 10)),
                       ],
                     )),
-                    Expanded(flex: 2, child: Text(item['categoria'] as String, style: const TextStyle(color: AppTheme.textGray, fontSize: 12), overflow: TextOverflow.ellipsis)),
+                    Expanded(flex: 2, child: Text('${item['categoria'] ?? '-'}', style: const TextStyle(color: AppTheme.textGray, fontSize: 12), overflow: TextOverflow.ellipsis)),
                     Expanded(flex: 3, child: Row(
                       children: [
                         Expanded(child: ClipRRect(
@@ -730,8 +749,8 @@ class _UserModeViewState extends State<UserModeView> {
                         ))),
                       ],
                     )),
-                    Expanded(flex: 2, child: Text('R\$ ${(item['preco'] as double).toStringAsFixed(2).replaceAll('.', ',')}', style: const TextStyle(color: AppTheme.textWhite, fontSize: 12))),
-                    Expanded(flex: 2, child: Text('R\$ ${(item['valorTotal'] as double).toStringAsFixed(2).replaceAll('.', ',')}', style: const TextStyle(color: AppTheme.primaryTeal, fontSize: 12, fontWeight: FontWeight.bold))),
+                    Expanded(flex: 2, child: Text('R\$ ${((item['preco_venda'] ?? 0) as num).toStringAsFixed(2).replaceAll('.', ',')}', style: const TextStyle(color: AppTheme.textWhite, fontSize: 12))),
+                    Expanded(flex: 2, child: Text(_money((((item['estoque_atual'] ?? 0) as num) * ((item['preco_venda'] ?? 0) as num)).toDouble()), style: const TextStyle(color: AppTheme.primaryTeal, fontSize: 12, fontWeight: FontWeight.bold))),
                   ],
                 ),
               );
@@ -810,9 +829,6 @@ class _UserModeViewState extends State<UserModeView> {
     );
   }
 
-  // ================================================================
-  // CARD EXECUTIVO
-  // ================================================================
   Widget _buildExecCard(String title, String value, {IconData? icon, Color? iconColor, String? subtitle, Color? valueColor}) {
     return Container(
       padding: const EdgeInsets.all(20),

@@ -1,7 +1,7 @@
 // Web implementation: creates an html.IFrameElement and registers a view factory
 // to render it via HtmlElementView.
 // This file is only compiled on web (conditional export in native_pdf_iframe.dart).
-// ignore_for_file: avoid_web_libraries_in_flutter
+// ignore_for_file: avoid_web_libraries_in_flutter, deprecated_member_use
 import 'dart:html' as html;
 import 'dart:ui_web' as ui_web;
 
@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 
 class NativePdfIframe extends StatefulWidget {
   final String url;
-  const NativePdfIframe({Key? key, required this.url}) : super(key: key);
+  const NativePdfIframe({super.key, required this.url});
 
   @override
   State<NativePdfIframe> createState() => _NativePdfIframeState();
@@ -80,7 +80,7 @@ class _NativePdfIframeState extends State<NativePdfIframe> {
         SizedBox.expand(child: HtmlElementView(viewType: _viewId)),
         if (!_loaded && !_hasError)
           Container(
-            color: Colors.black.withOpacity(0.6),
+            color: Colors.black.withValues(alpha: 0.6),
             child: const Center(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -94,7 +94,7 @@ class _NativePdfIframeState extends State<NativePdfIframe> {
           ),
         if (_hasError)
           Container(
-            color: Colors.black.withOpacity(0.6),
+            color: Colors.black.withValues(alpha: 0.6),
             child: Center(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
