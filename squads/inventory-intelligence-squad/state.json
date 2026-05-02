@@ -1,55 +1,59 @@
-﻿{
-    "run_id":  "2026-04-08-040742",
-    "agents":  [
-                   {
-                       "status":  "idle",
-                       "icon":  "📊",
-                       "desk":  {
-                                    "col":  1,
-                                    "row":  1
-                                },
-                       "name":  "Elias Economia",
-                       "id":  "elias-economia"
-                   },
-                   {
-                       "status":  "idle",
-                       "icon":  "🧹",
-                       "desk":  {
-                                    "col":  2,
-                                    "row":  1
-                                },
-                       "name":  "Dora Dados",
-                       "id":  "dora-dados"
-                   },
-                   {
-                       "status":  "idle",
-                       "icon":  "🔗",
-                       "desk":  {
-                                    "col":  3,
-                                    "row":  1
-                                },
-                       "name":  "Igor Integração",
-                       "id":  "igor-integracao"
-                   },
-                   {
-                       "status":  "idle",
-                       "icon":  "🌐",
-                       "desk":  {
-                                    "col":  1,
-                                    "row":  2
-                                },
-                       "name":  "Sérgio Frontend",
-                       "id":  "sergio-frontend"
-                   }
-               ],
-    "handoff":  null,
-    "startedAt":  "2026-04-08T04:07:42Z",
-    "status":  "running",
-    "squad":  "inventory-intelligence-squad",
-    "step":  {
-                 "current":  0,
-                 "label":  "",
-                 "total":  7
-             },
-    "updatedAt":  "2026-04-08T04:07:42Z"
+{
+  "squad": "inventory-intelligence-squad",
+  "status": "running",
+  "step": {
+    "current": 4,
+    "total": 7,
+    "label": "step-04-checkpoint"
+  },
+  "agents": [
+    {
+      "id": "elias-economia",
+      "name": "Elias Economia",
+      "icon": "??",
+      "status": "done",
+      "desk": {
+        "col": 1,
+        "row": 1
+      }
+    },
+    {
+      "id": "dora-dados",
+      "name": "Dora Dados",
+      "icon": "??",
+      "status": "done",
+      "desk": {
+        "col": 2,
+        "row": 1
+      }
+    },
+    {
+      "id": "igor-integracao",
+      "name": "Igor Integra??o",
+      "icon": "??",
+      "status": "idle",
+      "desk": {
+        "col": 3,
+        "row": 1
+      }
+    },
+    {
+      "id": "sergio-frontend",
+      "name": "S?rgio Frontend",
+      "icon": "??",
+      "status": "idle",
+      "desk": {
+        "col": 1,
+        "row": 2
+      }
+    }
+  ],
+  "handoff": {
+    "from": "elias-economia",
+    "to": "igor-integracao",
+    "message": "Auditoria financeira conclu?da e pronta para checkpoint de loja.",
+    "completedAt": "2026-05-02T15:09:04.028394"
+  },
+  "startedAt": "2026-05-02T15:09:04.028425",
+  "updatedAt": "2026-05-02T15:09:04.028428"
 }

@@ -66,9 +66,9 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
-  # To add assets to your application, add an assets section, like this:
-  assets:
-    - .env
+  # Do not package the .env file as an asset. Environment variables should
+  # be injected at runtime or provided by secure CI/CD, not bundled into
+  # the app binary or web assets.
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

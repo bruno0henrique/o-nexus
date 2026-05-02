@@ -22,3 +22,7 @@ build/
 .vscode/
 # Generated files
 **/gen/**
+
+# Environment files
+.env
+.env.*.local
